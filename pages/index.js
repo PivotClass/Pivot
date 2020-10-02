@@ -10,13 +10,6 @@ import MicIcon from '@material-ui/icons/Mic';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import React from 'react';
-import { Gradient } from 'react-gradient';
-
-// Gradient colors
-const gradients = [
-    ['#00bfff', '#02a4d3'],
-    ['#2a52be', '#87cefa'],
-];
 
 // Alert helper function for alert warning.
 function Alert(props) {
@@ -46,23 +39,18 @@ export default function Home() {
 
     // Styles
     const styles = {
-        full: {
-            width: "100vw",
-            height: "100vh",
+        container: {
+            margin: "0 auto",
+            padding: "24px",
+            display: "flex",
+            flexDirection: "column",
+            textAlign: "center",
         },
         h1: {
             position: "absolute",
             textAlign: "center",
             width: "100%",
             top: "10%",
-            color: "#ffffff",
-            fontWeight: "500",
-        },
-        roomCodeText: {
-            display: "block",
-            textAlign: "center",
-            color: "#ffffff",
-            fontWeight: "700",
         },
         button: {
             display: "inline-block",
@@ -98,7 +86,6 @@ export default function Home() {
             marginTop: "5px",
             marginBottom: "10px",
             width: "180.641px",
-            background: "#ffffff",
         },
         buttonContainer: {
             background: "transparent",
@@ -126,72 +113,64 @@ export default function Home() {
             <Helmet>
                 <title>Pivot</title>
             </Helmet>
-            <Gradient
-                gradients={gradients}
-                property="background"
-                duration={3000}
-                angle="45deg">
-                <div style={styles.full}>
-                    <Typography variant="h2" gutterBottom style={styles.h1}>
-                        Welcome to Pivot!
-                    </Typography>
-                    <div style={styles.buttonContainer}>
-                        <div>
+            <div style={styles.container}>
+                <Typography variant="h2" gutterBottom style={styles.h1}>Welcome to Pivot!</Typography>
+                <div style={styles.buttonContainer}>
+                    <div>
+                        <div className="dropdownDiv">
+                            <Link href='/t/'>
+                                <Tooltip title="Create a new teacher room">
+                                    <Button
+                                        size="large" variant="outlined" color="primary" disableElevation
+                                        endIcon={<MicIcon/>}>
+                                        I'm a teacher
+                                    </Button>
+                                </Tooltip>
+                            </Link>
+                        </div>
+                    </div>
+                    <div>
+                        <form>
+                            <Typography variant="button" display="block">
+                                My room code is:
+                            </Typography>
+                            <TextField
+                                id="outlined-search"
+                                type="text"
+                                variant="outlined"
+                                InputProps={{
+                                    style: styles.codeInput,
+                                }}
+                                value={studentCode}
+                                error={errorOpen}
+                                onChange={(e) => {
+                                    setStudentCode(e.target.value);
+                                    if (!isValid(e.target.value)) {
+                                        handleErrorClick();
+                                    } else {
+                                        handleErrorClose();
+                                    }
+                                }
+                                }/>
                             <div className="dropdownDiv">
-                                <Link href='/t/'>
-                                    <Tooltip title="Create a new teacher room">
+                                <Link href={"/s/" + (isValid(studentCode) ? studentCode : "")} passHref>
+                                    <Tooltip title="Join a student room">
                                         <Button
-                                            size="large" variant="contained" color="primary" disableElevation
-                                            endIcon={<MicIcon/>}>
-                                            I'm a teacher
+                                            size="large" variant="outlined" color="secondary" disableElevation
+                                            endIcon={<FaceIcon/>}
+                                            type="submit">
+                                            I'm a student
                                         </Button>
                                     </Tooltip>
                                 </Link>
                             </div>
-                        </div>
-                        <div>
-                            <form>
-                                <Typography variant="button" style={styles.roomCodeText}>
-                                    My room code is:
-                                </Typography>
-                                <TextField
-                                    id="outlined-search"
-                                    type="text"
-                                    variant="outlined"
-                                    InputProps={{
-                                        style: styles.codeInput,
-                                    }}
-                                    value={studentCode}
-                                    error={errorOpen}
-                                    onChange={(e) => {
-                                        setStudentCode(e.target.value);
-                                        if (!isValid(e.target.value)) {
-                                            handleErrorClick();
-                                        } else {
-                                            handleErrorClose();
-                                        }
-                                    }
-                                    }/>
-                                <div className="dropdownDiv">
-                                    <Link href={"/s/" + (isValid(studentCode) ? studentCode : "")} passHref>
-                                        <Tooltip title="Join a student room">
-                                            <Button
-                                                size="large" variant="contained" color="secondary" disableElevation
-                                                endIcon={<FaceIcon/>}
-                                                type="submit">
-                                                I'm a student
-                                            </Button>
-                                        </Tooltip>
-                                    </Link>
-                                </div>
-                            </form>
-                        </div>
-                        <Snackbar open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
-                            <Alert onClose={handleErrorClose} severity="error">Your code is currently invalid!</Alert>
-                        </Snackbar>
+                        </form>
                     </div>
+                    <Snackbar open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
+                        <Alert onClose={handleErrorClose} severity="error">Your code is currently invalid!</Alert>
+                    </Snackbar>
                 </div>
-            </Gradient>
+            </div>
         </>
     )
 }
