@@ -13,7 +13,7 @@ export default function Teacher(props) {
             backgroundColor: "pink",
         }
     };
-    // calls useList to create a room and list object (and initialize function to set list)
+
     // demonstrates roomservice list feature by creating a room and list object
     function useList(roomName, listName) {
         const [list, setList] = useState();
@@ -69,6 +69,7 @@ export default function Teacher(props) {
         return [map, setMap];
     }
 
+
     function updateListByID() {
         [list, setList] = useList(props.roomName, "polls");
     }
@@ -79,6 +80,11 @@ export default function Teacher(props) {
 
     // initializes map object and setMap method
     const [map, setMap] = useMap(props.roomName, "data");
+
+    if (map && typeof map.get("pollResponses") !== "object" ) {
+        setMap(map.set("pollResponses", []));
+    }
+
 
     // called when teacher data is inputted
     function onEnterPress(fieldName, text, setText) {
@@ -94,10 +100,21 @@ export default function Teacher(props) {
         console.log(map.get("importantQuote"));
     }
 
+    function responses() {
+        if (!map || !map.get("pollResponses")) return;
+        console.log(map.get("pollResponses"));
+        return map.get("pollResponses").map(str => {
+            return (<li> {str} </li>);
+        });
+    }
+
     return (
         <div style={styles.container}>
             <div> 
-            <b>You are teacher.</b>
+                (room id: {props.roomName})
+                <br/>
+                <br/>
+                <b>Teacher View:</b>
             </div>
             <br/>
             <div>
@@ -113,7 +130,16 @@ export default function Teacher(props) {
                             onEnterPress("pollQuestion", questionText, setQuestionText);
                         }
                     }}
-                />
+                /> You entered: <b>"{(map && map.get("pollQuestion") ? map.get("pollQuestion") : "")}"</b>
+
+                <br/>
+                
+                <div> 
+                    <ul>
+                        {responses()}
+                    </ul>
+                </div>
+
                 <br/>
                 Enter an important quote:
                 {' '}
@@ -127,7 +153,7 @@ export default function Teacher(props) {
                             onEnterPress("importantQuote", quoteText, setQuoteText);
                         }
                     }}
-                />
+                /> You entered: <b>"{(map && map.get("importantQuote") ? map.get("importantQuote") : "")}"</b>
             </div>
         </div>
         

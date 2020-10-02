@@ -20,17 +20,19 @@ export default function Student(props) {
             fontSize: "2em",
             outline: "none",
             transition: "all 0.10s",
-            marginBottom: "30px",
+            marginBottom: "30px"
+        },
+        pollResponses: {
+            fontSize: "18px",
+            borderBottom: "1px solid black"
         }
     };
 
-    // calls useList to create a room and list object (and initialize function to set list)
-    const [list, setList] = useList(props.roomName, "polls");
+    // initialize map object and setMap function
+    const [map, setMap] = useMap(props.roomName, "data")
 
-    // demonstrates roomservice list feature by creating a room and list object
-    function useList(roomName, listName) {
-        const [list, setList] = useState();
-
+    function useMap(roomName, mapName) {
+        const [map, setMap] = useState();
         useEffect(() => {
             async function load() {
                 // calls roomservice client
@@ -38,50 +40,54 @@ export default function Student(props) {
                     auth: "/api/roomservice",
                 });
 
-                // creates room from client and list from room
+                // creates room from client and map from room
                 console.log("Opening room: " + roomName);
                 const room = await client.room(roomName);
-                const l = await room.list(listName);
-                setList(l);
+                const m = await room.map(mapName);
+                setMap(m);
 
-                room.subscribe(l, (li) => {
-                    console.log(li);
-                    setList(li);
+                room.subscribe(m, (mp) => {
+                    console.log(mp);
+                    setMap(mp);
                 });
             }
 
             load()
         }, []);
-        return [list, setList];
+        return [map, setMap];
     }
 
-    function updateListByID() {
-        [list, setList] = useList(props.roomName, "polls");
-    }
-
+    // generic updating text component
     const [text, setText] = useState("");
 
     // called when poll item is clicked
     function onCheckOff(i) {
-        if (!list) return;
-        console.log("delete", list);
-        setList(list.delete(i));
+        if (!map || !map.get("pollResponses")) return;
+        const temp = map.get("pollResponses");
+        temp.splice(i, 1);
+        setMap(map.set("pollResponses", temp));
     }
 
     // called when poll item is entered
     function onEnterPress() {
-        if (!list) return;
-        setList(list.push(text));
+        if (!map || !map.get("pollResponses")) return;
+        const temp = map.get("pollResponses");
+        temp.push(text);
+        setMap(map.set("pollResponses", temp));
         setText("");
     }
 
-    // slightly edited from the roomservice example template -- we will definitely change layout later
     return (
         <div style={styles.container}>
             <h1>Room ID: <code>{props.roomName}</code></h1>
+            <h2>Quote of the Day: {' '}
+            <em>
+                "{(map && map.get("importantQuote") ? map.get("importantQuote") : "")}"
+            </em>
+            </h2>
 
             <h2>Poll Responses</h2>
-            <p>(Professor: "how did Abraham Lincoln die?")</p>
+            <p><b>(Professor: "{((map && map.get("pollQuestion")) ? map.get("pollQuestion") : "")}")</b></p>
             {/* textbox component */}
             <input
                 style={styles.input}
@@ -94,15 +100,16 @@ export default function Student(props) {
                     }
                 }}
             />
-            {list &&
-            list.toArray().map((l, i) => (
+            {map &&
+            map.get("pollResponses").map((l, i) => (
                 <p
+                    style={styles.pollResponses}
                     key={JSON.stringify(l) + "-" + i}
                     onClick={() => onCheckOff(i)}
                 >
                     {l.object || l}
-                    {"-"}
-                    {i}
+                    {/* {"-"} */}
+                    {/* {i} */}
                 </p>
             ))}
         </div>
