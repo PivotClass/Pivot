@@ -6,27 +6,14 @@ export default function Teacher(props) {
     // CSS styling
     const styles = {
         container: {
-            margin: "0 auto",
-            padding: "24px",
-            display: "flex",
-            flexDirection: "column",
+            backgroundColor: "#88ddff",
+            padding: "10px"
         },
         input: {
-            backgroundColor: "#22cfef",
-            padding: "30px 30px",
-            borderRadius: "200px",
-            border: "1px solid black",
-            display: "flex",
-            fontSize: "2em",
-            outline: "none",
-            transition: "all 0.10s",
-            marginBottom: "30px",
+            backgroundColor: "pink",
         }
     };
-
     // calls useList to create a room and list object (and initialize function to set list)
-    const [list, setList] = useList(props.roomName, "polls");
-
     // demonstrates roomservice list feature by creating a room and list object
     function useList(roomName, listName) {
         const [list, setList] = useState();
@@ -55,56 +42,94 @@ export default function Teacher(props) {
         return [list, setList];
     }
 
+    // demonstrates roomservice map feature by creating a room and map object
+    function useMap(roomName, mapName) {
+        const [map, setMap] = useState();
+        useEffect(() => {
+            async function load() {
+                // calls roomservice client
+                const client = new RoomService({
+                    auth: "/api/roomservice",
+                });
+
+                // creates room from client and map from room
+                console.log("Opening room: " + roomName);
+                const room = await client.room(roomName);
+                const m = await room.map(mapName);
+                setMap(m);
+
+                room.subscribe(m, (mp) => {
+                    console.log(mp);
+                    setMap(mp);
+                });
+            }
+
+            load()
+        }, []);
+        return [map, setMap];
+    }
+
     function updateListByID() {
         [list, setList] = useList(props.roomName, "polls");
     }
 
-    const [text, setText] = useState("");
+    // two different text objects for two different textbooks
+    const [questionText, setQuestionText] = useState("");
+    const [quoteText, setQuoteText] = useState("");
 
-    // called when poll item is clicked
-    function onCheckOff(i) {
-        if (!list) return;
-        console.log("delete", list);
-        setList(list.delete(i));
-    }
+    // initializes map object and setMap method
+    const [map, setMap] = useMap(props.roomName, "data");
 
-    // called when poll item is entered
-    function onEnterPress() {
-        if (!list) return;
-        setList(list.push(text));
+    // called when teacher data is inputted
+    function onEnterPress(fieldName, text, setText) {
+        if (!map) return;
+
+        setMap(map.set(fieldName, text)); 
         setText("");
+        
     }
 
-    // slightly edited from the roomservice example template -- we will definitely change layout later
+    if (map) {
+        console.log(map.get("pollQuestion"));
+        console.log(map.get("importantQuote"));
+    }
+
     return (
         <div style={styles.container}>
-            <h1>Room ID: <code>{props.roomName}</code></h1>
-
-            <h2>Poll Responses</h2>
-            <p>(Professor: "how did Abraham Lincoln die?")</p>
-            {/* textbox component */}
-            <input
-                style={styles.input}
-                type="text"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                onKeyPress={(e) => {
-                    if (e.key === "Enter") {
-                        onEnterPress();
-                    }
-                }}
-            />
-            {list &&
-            list.toArray().map((l, i) => (
-                <p
-                    key={JSON.stringify(l) + "-" + i}
-                    onClick={() => onCheckOff(i)}
-                >
-                    {l.object || l}
-                    {"-"}
-                    {i}
-                </p>
-            ))}
+            <div> 
+            <b>You are teacher.</b>
+            </div>
+            <br/>
+            <div>
+                Enter a poll question:
+                {" "}
+                <input
+                    style={styles.input}
+                    type="text"
+                    value={questionText}
+                    onChange={(e) => setQuestionText(e.target.value)}
+                    onKeyPress={(e) => {
+                        if (e.key === "Enter" && questionText !== "") {
+                            onEnterPress("pollQuestion", questionText, setQuestionText);
+                        }
+                    }}
+                />
+                <br/>
+                Enter an important quote:
+                {' '}
+                <input
+                    style={styles.input}
+                    type="text"
+                    value={quoteText}
+                    onChange={(e) => setQuoteText(e.target.value)}
+                    onKeyPress={(e) => {
+                        if (e.key === "Enter" && quoteText !== "") {
+                            onEnterPress("importantQuote", quoteText, setQuoteText);
+                        }
+                    }}
+                />
+            </div>
         </div>
+        
     );
 }
