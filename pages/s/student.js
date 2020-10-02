@@ -100,7 +100,7 @@ export default function Student(props) {
                     }
                 }}
             />
-            {map &&
+            {map && map.get("pollResponses") && 
             map.get("pollResponses").map((l, i) => (
                 <p
                     style={styles.pollResponses}
