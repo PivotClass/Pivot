@@ -79,31 +79,33 @@ export default function Teacher(props) {
     const [quoteText, setQuoteText] = useState("");
 
     // initializes map object and setMap method
-    const [map, setMap] = useMap(props.roomName, "data");
+    const [dataMap, setMap] = useMap(props.roomName, "data");
+    const [pollAnswers, setPollAnswers] = useList(props.roomName, "poll");
 
-    if (map && typeof map.get("pollResponses") !== "object" ) {
-        setMap(map.set("pollResponses", []));
+
+    if (dataMap && typeof dataMap.get("pollResponses") !== "object" ) {
+        setMap(dataMap.set("pollResponses", pollAnswers));
     }
 
 
     // called when teacher data is inputted
     function onEnterPress(fieldName, text, setText) {
-        if (!map) return;
+        if (!dataMap) return;
 
-        setMap(map.set(fieldName, text)); 
+        setMap(dataMap.set(fieldName, text)); 
         setText("");
         
     }
 
-    if (map) {
-        console.log(map.get("pollQuestion"));
-        console.log(map.get("importantQuote"));
+    if (dataMap) {
+        console.log(dataMap.get("pollQuestion"));
+        console.log(dataMap.get("importantQuote"));
     }
 
     function responses() {
-        if (!map || !map.get("pollResponses")) return;
-        console.log(map.get("pollResponses"));
-        return map.get("pollResponses").map(str => {
+        if (!dataMap || !dataMap.get("pollResponses")) return;
+        console.log(dataMap.get("pollResponses"));
+        return dataMap.get("pollResponses").map(str => {
             return (<li> {str} </li>);
         });
     }
@@ -130,7 +132,7 @@ export default function Teacher(props) {
                             onEnterPress("pollQuestion", questionText, setQuestionText);
                         }
                     }}
-                /> You entered: <b>"{(map && map.get("pollQuestion") ? map.get("pollQuestion") : "")}"</b>
+                /> You entered: <b>"{(dataMap && dataMap.get("pollQuestion") ? dataMap.get("pollQuestion") : "")}"</b>
 
                 <br/>
                 
@@ -153,7 +155,7 @@ export default function Teacher(props) {
                             onEnterPress("importantQuote", quoteText, setQuoteText);
                         }
                     }}
-                /> You entered: <b>"{(map && map.get("importantQuote") ? map.get("importantQuote") : "")}"</b>
+                /> You entered: <b>"{(dataMap && dataMap.get("importantQuote") ? dataMap.get("importantQuote") : "")}"</b>
             </div>
         </div>
         
