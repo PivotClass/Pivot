@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useEffect, useState } from "react";
-import { makeStyles } from '@material-ui/core/styles';
+import { Helmet } from 'react-helmet'
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -11,31 +11,24 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import React from 'react';
 
+// Alert helper function for alert warning.
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& .MuiTextField-root': {
-            margin: theme.spacing(1),
-            width: 200,
-        },
-    },
-}));
-
 export default function Home() {
-
-    const classes = useStyles();
-
+    // Student code that is entered into the field
     const [studentCode, setStudentCode] = useState("");
 
+    // Whether or not student code is valid, so as to show the error tooltip
     const [errorOpen, setErrorOpen] = React.useState(false);
 
+    // Shows error tooltip.
     const handleErrorClick = () => {
         setErrorOpen(true);
     };
 
+    // Closes error tooltip
     const handleErrorClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -44,6 +37,7 @@ export default function Home() {
         setErrorOpen(false);
     };
 
+    // Styles
     const styles = {
         container: {
             margin: "0 auto",
@@ -115,63 +109,68 @@ export default function Home() {
     }
 
     return (
-        <div style={styles.container}>
-            <Typography variant="h2" gutterBottom style={styles.h1}>Welcome to Pivot!</Typography>
-            <div style={styles.buttonContainer}>
-                <div>
-                    <div className="dropdownDiv">
-                        <Link href='/t/'>
-                            <Tooltip title="Create a new teacher room">
-                                <Button
-                                    size="large" variant="outlined" color="primary" disableElevation
-                                    endIcon={<MicIcon/>}>
-                                    I'm a teacher
-                                </Button>
-                            </Tooltip>
-                        </Link>
-                    </div>
-                </div>
-                <div>
-                    <form>
-                        <Typography variant="button" display="block">
-                            My room code is:
-                        </Typography>
-                        <TextField
-                            id="outlined-search"
-                            type="text"
-                            variant="outlined"
-                            InputProps={{
-                                style: styles.codeInput,
-                            }}
-                            value={studentCode}
-                            error={errorOpen}
-                            onChange={(e) => {
-                                setStudentCode(e.target.value);
-                                if (!isValid(e.target.value)) {
-                                    handleErrorClick();
-                                } else {
-                                    handleErrorClose();
-                                }
-                            }
-                            }/>
+        <>
+            <Helmet>
+                <title>Pivot</title>
+            </Helmet>
+            <div style={styles.container}>
+                <Typography variant="h2" gutterBottom style={styles.h1}>Welcome to Pivot!</Typography>
+                <div style={styles.buttonContainer}>
+                    <div>
                         <div className="dropdownDiv">
-                            <Link href={"/s/" + (isValid(studentCode) ? studentCode : "")} passHref>
-                                <Tooltip title="Join a student room">
+                            <Link href='/t/'>
+                                <Tooltip title="Create a new teacher room">
                                     <Button
-                                        size="large" variant="outlined" color="secondary" disableElevation
-                                        endIcon={<FaceIcon/>}
-                                        type="submit">
-                                        I'm a student
+                                        size="large" variant="outlined" color="primary" disableElevation
+                                        endIcon={<MicIcon/>}>
+                                        I'm a teacher
                                     </Button>
                                 </Tooltip>
                             </Link>
                         </div>
-                    </form>
+                    </div>
+                    <div>
+                        <form>
+                            <Typography variant="button" display="block">
+                                My room code is:
+                            </Typography>
+                            <TextField
+                                id="outlined-search"
+                                type="text"
+                                variant="outlined"
+                                InputProps={{
+                                    style: styles.codeInput,
+                                }}
+                                value={studentCode}
+                                error={errorOpen}
+                                onChange={(e) => {
+                                    setStudentCode(e.target.value);
+                                    if (!isValid(e.target.value)) {
+                                        handleErrorClick();
+                                    } else {
+                                        handleErrorClose();
+                                    }
+                                }
+                                }/>
+                            <div className="dropdownDiv">
+                                <Link href={"/s/" + (isValid(studentCode) ? studentCode : "")} passHref>
+                                    <Tooltip title="Join a student room">
+                                        <Button
+                                            size="large" variant="outlined" color="secondary" disableElevation
+                                            endIcon={<FaceIcon/>}
+                                            type="submit">
+                                            I'm a student
+                                        </Button>
+                                    </Tooltip>
+                                </Link>
+                            </div>
+                        </form>
+                    </div>
+                    <Snackbar open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
+                        <Alert onClose={handleErrorClose} severity="error">Your code is currently invalid!</Alert>
+                    </Snackbar>
                 </div>
-                <Snackbar open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
-                    <Alert onClose={handleErrorClose} severity="error">Your code is currently invalid!</Alert>
-                </Snackbar>
             </div>
-        </div>
+        </>
     )
 }
