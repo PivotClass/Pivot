@@ -29,7 +29,7 @@ const UnlinkedStudent = () => {
     return (
         <div style={styles.container}>
             <Typography variant="h2" gutterBottom style={styles.invalidText}>You have not entered a valid student code.</Typography>
-            <Link href=''>
+            <Link href='/'>
                 <Button
                     size="large" variant="outlined" color="secondary" disableElevation>
                     Back
