@@ -77,11 +77,6 @@ export default function Home() {
         },
     };
 
-    // Goes to student page when enter is pressed
-    function onEnterPress() {
-        //btn.click();
-    }
-
     return (
         <div style={styles.container}>
             <h1 style={styles.h1}>Welcome to Pivot!</h1>
@@ -97,28 +92,25 @@ export default function Home() {
                 </div>
             </div>
             <div style={styles.halfright}>
-                <p style={styles.text}>My code is: </p>
-                <input
-                    style={styles.code}
-                    type="text"
-                    value={studentCode}
-                    onChange={(e) => setStudentCode(e.target.value)}
-                    /*onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                            onEnterPress();
-                        }
-                    }}*/
-                />
-                <div className="dropdownDiv">
-                    <Link href={"/s/" + studentCode} passHref>
-                        <button
-                        style={styles.button}
-                        type="submit"
-                        >
-                            I'm a student
-                        </button>
-                    </Link>
-                </div>
+                <form>
+                    <p style={styles.text}>My code is: </p>
+                    <input
+                        style={styles.code}
+                        type="text"
+                        value={studentCode}
+                        onChange={(e) => setStudentCode(e.target.value)}
+                    />
+                    <div className="dropdownDiv">
+                        <Link href={"/s/" + studentCode} passHref>
+                            <button
+                            style={styles.button}
+                            type="submit"
+                            >
+                                I'm a student
+                            </button>
+                        </Link>
+                    </div>
+                </form>
             </div>
         </div>
     )
