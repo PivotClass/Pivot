@@ -28,13 +28,14 @@ export default function Home() {
             borderRadius: "0.12em",
             boxSizing: "border-box",
             textDecoration: "none",
-            fontFamily: "'Roboto',sans-serif",
+            fontFamily: "Roboto, sans-serif",
             fontWeight: "300",
             fontSize: "36px",
             color: "#000000",
             textAlign: "center",
             transition: "all 0.2s",
             flexDirection: "row",
+            cursor: "pointer",
         },
         dropdownDiv: {
             position: "relative",
@@ -59,7 +60,7 @@ export default function Home() {
             right: "0",
         },
         text: {
-            fontFamily: "'Roboto',sans-serif",
+            fontFamily: "Roboto, sans-serif",
             fontSize: "36px",
             fontWeight: "100",
         },
@@ -67,7 +68,7 @@ export default function Home() {
             background: "transparent",
             border: "none",
             borderBottom: "1px solid #000000",
-            fontFamily: "'Roboto',sans-serif",
+            fontFamily: "Roboto, sans-serif",
             fontSize: "36px",
             fontWeight: "100",
             outline: "none",
@@ -76,6 +77,18 @@ export default function Home() {
             marginBottom: "30px",
         },
     };
+
+    // checks if code is of valid format (NOT YET CHECKING DUPLICATE ROOMS) before redirecting to avoid arbitrary file access
+    function isValid(code) {
+        let codeExp = /^[a-z0-9]{4}$/;
+        return codeExp.test(code); 
+    }
+    // console.log("T --" + isValid("0000"));
+    // console.log("T --" + isValid("a19z"));
+    // console.log("T --" + isValid("abcd"));
+    // console.log("F --" + isValid("A2js"));
+    // console.log("F --" + isValid("a20md"));
+    // console.log("F --" + isValid("a2d"));
 
     return (
         <div style={styles.container}>
@@ -101,7 +114,7 @@ export default function Home() {
                         onChange={(e) => setStudentCode(e.target.value)}
                     />
                     <div className="dropdownDiv">
-                        <Link href={"/s/" + studentCode} passHref>
+                        <Link href={"/s/" + (isValid(studentCode) ? studentCode : "")} passHref>
                             <button
                             style={styles.button}
                             type="submit"
