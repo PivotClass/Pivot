@@ -1,40 +1,125 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from "react";
+import React from 'react';
 
-function Home() {
+export default function Home() {
 
     const [studentCode, setStudentCode] = useState("");
 
+    const styles = {
+        container: {
+            margin: "0 auto",
+            padding: "24px",
+            display: "flex",
+            flexDirection: "column",
+            textAlign: "center",
+        },
+        h1: {
+            fontFamily: "'Roboto',sans-serif",
+            fontWeight: "300",
+            fontSize: "50px",
+        },
+        button: {
+            display: "inline-block",
+            padding: "0.35em 1.2em",
+            border: "0.1em solid #FFFFFF",
+            margin: "0 0.3em 0.3em 0",
+            borderRadius: "0.12em",
+            boxSizing: "border-box",
+            textDecoration: "none",
+            fontFamily: "'Roboto',sans-serif",
+            fontWeight: "300",
+            fontSize: "36px",
+            color: "#000000",
+            textAlign: "center",
+            transition: "all 0.2s",
+            flexDirection: "row",
+        },
+        dropdownDiv: {
+            position: "relative",
+            display: "inline-block",
+        },
+        halfleft: {
+            width: "50%",
+            position: "fixed",
+            zIndex: "1",
+            top: "40%",
+            overflowX: "hidden",
+            paddingTop: "20px",
+            left: "0",
+        },
+        halfright: {
+            width: "50%",
+            position: "fixed",
+            zIndex: "1",
+            top: "17.9%",
+            overflowX: "hidden",
+            paddingTop: "20px",
+            right: "0",
+        },
+        text: {
+            fontFamily: "'Roboto',sans-serif",
+            fontSize: "36px",
+            fontWeight: "100",
+        },
+        code: {
+            background: "transparent",
+            border: "none",
+            borderBottom: "1px solid #000000",
+            fontFamily: "'Roboto',sans-serif",
+            fontSize: "36px",
+            fontWeight: "100",
+            outline: "none",
+            textAlign: "center",
+            paddingBottom: "10px",
+            marginBottom: "30px",
+        },
+    };
+
     // Goes to student page when enter is pressed
     function onEnterPress() {
-        // Doesn't do anything so far
+        //btn.click();
     }
 
     return (
-        <ul>
-            <li>
-                <Link href="/t/">
-                    <a>I'm a teacher</a>
-                </Link>
-            </li>
-            <li>
-                I'm a student, my code is:
+        <div style={styles.container}>
+            <h1 style={styles.h1}>Welcome to Pivot!</h1>
+
+            <div style={styles.halfleft}>
+                <div className="dropdownDiv">
+                    <Link href='/t/'>
+                        <button
+                        style={styles.button}>
+                            I'm a teacher
+                        </button>
+                    </Link>
+                </div>
+            </div>
+            <div style={styles.halfright}>
+                <p style={styles.text}>My code is: </p>
                 <input
+                    style={styles.code}
                     type="text"
                     value={studentCode}
                     onChange={(e) => setStudentCode(e.target.value)}
-                    onKeyPress={(e) => {
+                    /*onKeyPress={(e) => {
                         if (e.key === "Enter") {
                             onEnterPress();
                         }
-                    }}
+                    }}*/
                 />
-                <br/>
-                <Link href={"/s/" + studentCode} passHref><a>Bring me to my room! </a></Link>
-            </li>
-        </ul>
+                <div className="dropdownDiv">
+                    <Link href={"/s/" + studentCode} passHref>
+                        <button
+                        style={styles.button}
+                        type="submit"
+                        >
+                            I'm a student
+                        </button>
+                    </Link>
+                </div>
+            </div>
+        </div>
     )
 }
-
-export default Home
