@@ -1,6 +1,7 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from "react";
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -8,7 +9,18 @@ import FaceIcon from '@material-ui/icons/Face';
 import MicIcon from '@material-ui/icons/Mic';
 import React from 'react';
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+            width: 200,
+        },
+    },
+}));
+
 export default function Home() {
+
+    const classes = useStyles();
 
     const [studentCode, setStudentCode] = useState("");
 
@@ -52,18 +64,14 @@ export default function Home() {
             fontSize: "36px",
             fontWeight: "100",
         },
-        code: {
-            // background: "#cccccc",
-            border: "none",
-            borderBottom: "1px solid #000000",
+        codeInput: {
             fontFamily: "Roboto, monospace",
-            fontSize: "42px",
+            fontSize: "38px",
             fontWeight: "100",
-            outline: "none",
             textAlign: "center",
-            paddingBottom: "10px",
+            marginTop: "5px",
             marginBottom: "10px",
-            width: "160px",
+            width: "180.641px",
         },
         buttonContainer: {
             background: "transparent",
@@ -103,7 +111,7 @@ export default function Home() {
                             <Tooltip title="Create a new teacher room">
                                 <Button
                                     size="large" variant="outlined" color="primary" disableElevation
-                                    endIcon={<MicIcon />}>
+                                    endIcon={<MicIcon/>}>
                                     I'm a teacher
                                 </Button>
                             </Tooltip>
@@ -115,22 +123,23 @@ export default function Home() {
                         <Typography variant="button" display="block">
                             My room code is:
                         </Typography>
-                        <input
-                            style={styles.code}
-                            type="text"
-                            value={studentCode}
-                            onChange={(e) => setStudentCode(e.target.value)}
-                        />
+                        <TextField id="outlined-search"
+                                   type="text"
+                                   variant="outlined"
+                                   InputProps={{
+                                       style: styles.codeInput,
+                                   }}
+                                   value={studentCode}
+                                   onChange={(e) => setStudentCode(e.target.value)}/>
                         <div className="dropdownDiv">
                             <Link href={"/s/" + (isValid(studentCode) ? studentCode : "")} passHref>
                                 <Tooltip title="Join a student room">
-                                <Button
-                                    size="large" variant="outlined" color="secondary" disableElevation
-                                    endIcon={<FaceIcon />}
-                                    type="submit"
-                                >
-                                    I'm a student
-                                </Button>
+                                    <Button
+                                        size="large" variant="outlined" color="secondary" disableElevation
+                                        endIcon={<FaceIcon/>}
+                                        type="submit">
+                                        I'm a student
+                                    </Button>
                                 </Tooltip>
                             </Link>
                         </div>
