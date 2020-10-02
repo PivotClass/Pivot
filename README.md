@@ -1,4 +1,5 @@
 # Pivot (IvyHacks 2020)
+https://pivotroom.herokuapp.com
 
 ## Installation (instructions for anyone who wants to test it at any point)
 
