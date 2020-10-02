@@ -68,7 +68,7 @@ export default function Home() {
             background: "transparent",
             border: "none",
             borderBottom: "1px solid #000000",
-            fontFamily: "Roboto, sans-serif",
+            fontFamily: "Roboto, monospace",
             fontSize: "36px",
             fontWeight: "100",
             outline: "none",
