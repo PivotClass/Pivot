@@ -7,7 +7,13 @@ import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import FaceIcon from '@material-ui/icons/Face';
 import MicIcon from '@material-ui/icons/Mic';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import React from 'react';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,6 +29,20 @@ export default function Home() {
     const classes = useStyles();
 
     const [studentCode, setStudentCode] = useState("");
+
+    const [errorOpen, setErrorOpen] = React.useState(false);
+
+    const handleErrorClick = () => {
+        setErrorOpen(true);
+    };
+
+    const handleErrorClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setErrorOpen(false);
+    };
 
     const styles = {
         container: {
@@ -94,13 +114,6 @@ export default function Home() {
         return codeExp.test(code);
     }
 
-    // console.log("T --" + isValid("0000"));
-    // console.log("T --" + isValid("a19z"));
-    // console.log("T --" + isValid("abcd"));
-    // console.log("F --" + isValid("A2js"));
-    // console.log("F --" + isValid("a20md"));
-    // console.log("F --" + isValid("a2d"));
-
     return (
         <div style={styles.container}>
             <Typography variant="h2" gutterBottom style={styles.h1}>Welcome to Pivot!</Typography>
@@ -123,14 +136,24 @@ export default function Home() {
                         <Typography variant="button" display="block">
                             My room code is:
                         </Typography>
-                        <TextField id="outlined-search"
-                                   type="text"
-                                   variant="outlined"
-                                   InputProps={{
-                                       style: styles.codeInput,
-                                   }}
-                                   value={studentCode}
-                                   onChange={(e) => setStudentCode(e.target.value)}/>
+                        <TextField
+                            id="outlined-search"
+                            type="text"
+                            variant="outlined"
+                            InputProps={{
+                                style: styles.codeInput,
+                            }}
+                            value={studentCode}
+                            error={errorOpen}
+                            onChange={(e) => {
+                                setStudentCode(e.target.value);
+                                if (!isValid(e.target.value)) {
+                                    handleErrorClick();
+                                } else {
+                                    handleErrorClose();
+                                }
+                            }
+                            }/>
                         <div className="dropdownDiv">
                             <Link href={"/s/" + (isValid(studentCode) ? studentCode : "")} passHref>
                                 <Tooltip title="Join a student room">
@@ -145,6 +168,9 @@ export default function Home() {
                         </div>
                     </form>
                 </div>
+                <Snackbar open={errorOpen} autoHideDuration={6000} onClose={handleErrorClose}>
+                    <Alert onClose={handleErrorClose} severity="error">Your code is currently invalid!</Alert>
+                </Snackbar>
             </div>
         </div>
     )
