@@ -30,7 +30,6 @@ export default function Student(props) {
 
     // initialize map object and setMap function
     const [dataMap, setMap] = useMap(props.roomName, "data");
-    const [pollAnswers, setPollAnswers] = useList(props.roomName, "poll");
 
 
     function useList(roomName, listName) {
@@ -129,7 +128,7 @@ export default function Student(props) {
                     }
                 }}
             />
-            {dataMap && dataMap.get("pollResponses") && 
+            {dataMap && typeof dataMap.get("pollResponses") === "object" &&
             dataMap.get("pollResponses").map((l, i) => (
                 <p
                     style={styles.pollResponses}

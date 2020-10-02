@@ -80,13 +80,12 @@ export default function Teacher(props) {
 
     // initializes map object and setMap method
     const [dataMap, setMap] = useMap(props.roomName, "data");
-    const [pollAnswers, setPollAnswers] = useList(props.roomName, "poll");
 
 
-    if (dataMap && typeof dataMap.get("pollResponses") !== "object" ) {
-        setMap(dataMap.set("pollResponses", pollAnswers));
+    if (dataMap && !dataMap.get("pollResponses")) {
+        setMap(dataMap.set("pollResponses", []));
+        console.log("SETTING MAP HERE!");
     }
-
 
     // called when teacher data is inputted
     function onEnterPress(fieldName, text, setText) {
@@ -103,11 +102,12 @@ export default function Teacher(props) {
     }
 
     function responses() {
-        if (!dataMap || !dataMap.get("pollResponses")) return;
+        if (dataMap && dataMap.get("pollResponses") && typeof dataMap.get("pollResponses") === "object") {
         console.log(dataMap.get("pollResponses"));
         return dataMap.get("pollResponses").map(str => {
-            return (<li> {str} </li>);
+            return (<li key={JSON.stringify(str) + "-" + Math.random()}> {str} </li>);
         });
+        }  
     }
 
     return (
