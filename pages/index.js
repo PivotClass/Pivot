@@ -140,7 +140,7 @@ export default function Home() {
                                     <Tooltip title="Create a new teacher room">
                                         <Button
                                             size="large" variant="contained" color="primary" disableElevation
-                                            endIcon={<MicIcon/>}>
+                                            endIcon={<CreateIcon/>}>
                                             I'm a teacher
                                         </Button>
                                     </Tooltip>
