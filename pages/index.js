@@ -12,6 +12,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import CreateIcon from '@material-ui/icons/Create';
 import React from 'react';
 import { Gradient } from 'react-gradient';
+import { StylesProvider } from '@material-ui/core/styles'
 
 // Gradient colors
 const gradients = [
@@ -120,7 +121,7 @@ export default function Home() {
     }
 
     return (
-        <>
+        <StylesProvider>
             <Helmet>
                 <title>Pivot</title>
             </Helmet>
@@ -190,6 +191,6 @@ export default function Home() {
                     </div>
                 </div>
             </Gradient>
-        </>
+        </StylesProvider>
     )
 }
