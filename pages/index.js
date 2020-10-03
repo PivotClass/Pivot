@@ -9,6 +9,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import MicIcon from '@material-ui/icons/Mic';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import CreateIcon from '@material-ui/icons/Create';
 import React from 'react';
 
 // Alert helper function for alert warning.
@@ -122,7 +123,7 @@ export default function Home() {
                                 <Tooltip title="Create a new teacher room">
                                     <Button
                                         size="large" variant="outlined" color="primary" disableElevation
-                                        endIcon={<MicIcon/>}>
+                                        endIcon={<CreateIcon/>}>
                                         I'm a teacher
                                     </Button>
                                 </Tooltip>
