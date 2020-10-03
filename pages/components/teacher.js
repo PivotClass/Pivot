@@ -9,10 +9,12 @@ import ImageIcon from '@material-ui/icons/Image';
 import WorkIcon from '@material-ui/icons/Work';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import { sizing } from '@material-ui/system';
+import { StylesProvider } from '@material-ui/core/styles'
 
 import TeacherPoll from "./TeacherPoll"
 import TeacherQuestion from "./TeacherQuestion"
 import Tooltip from "./Tooltip"
+import {Style} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,16 +28,18 @@ export default function TeacherFeed() {
     const classes = useStyles();
 
     return (
-        <List className={classes.root} width="100%">
-            <ListItem width="100%">
-                <TeacherPoll width="100%"/>
-            </ListItem>
-            <ListItem width="100%">
-                <TeacherQuestion width="100%"/>
-            </ListItem>
-            <ListItem width="100%">
-                <Tooltip width="100%"/>
-            </ListItem>
-        </List>
+        <StylesProvider>
+            <List className={classes.root} width="100%">
+                <ListItem width="100%">
+                    <TeacherPoll width="100%"/>
+                </ListItem>
+                <ListItem width="100%">
+                    <TeacherQuestion width="100%"/>
+                </ListItem>
+                <ListItem width="100%">
+                    <Tooltip width="100%"/>
+                </ListItem>
+            </List>
+        </StylesProvider>
     );
 }

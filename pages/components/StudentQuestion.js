@@ -20,6 +20,7 @@ import WbCloudyIcon from '@material-ui/icons/WbCloudy';
 import TextField from "@material-ui/core/TextField";
 import MenuItem from '@material-ui/core/MenuItem';
 import { sizing } from '@material-ui/system';
+import { StylesProvider } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,31 +44,33 @@ export default function StudentQuestion() {
     const classes = useStyles();
 
     return (
-        <Card className={classes.root} variant="outlined" width="100%">
-            <CardContent>
-                <TextField
-                    id="filled-basic-questionbox"
-                    label="Question"
-                    variant="outlined"
-                    fullWidth
-                    // style={styles.input}
-                    type="text"
-                    // value={questionTextbox}
-                    // onChange={(e) => setQuestionTextbox(e.target.value)}
-                    multiline={true}
-                    margin={"normal"}
-                />
-                <Typography className={classes.pos} color="textSecondary">
-                    Ask an anonymous question to the instructor!
-                </Typography>
+        <StylesProvider>
+            <Card className={classes.root} variant="outlined" width="100%">
+                <CardContent>
+                    <TextField
+                        id="filled-basic-questionbox"
+                        label="Question"
+                        variant="outlined"
+                        fullWidth
+                        // style={styles.input}
+                        type="text"
+                        // value={questionTextbox}
+                        // onChange={(e) => setQuestionTextbox(e.target.value)}
+                        multiline={true}
+                        margin={"normal"}
+                    />
+                    <Typography className={classes.pos} color="textSecondary">
+                        Ask an anonymous question to the instructor!
+                    </Typography>
 
-            </CardContent>
-            <Divider variant="middle"/>
-            <CardActions>
-                <Button variant="outlined" color="primary" className={classes.button}>
-                    Ask
-                </Button>
-            </CardActions>
-        </Card>
+                </CardContent>
+                <Divider variant="middle"/>
+                <CardActions>
+                    <Button variant="outlined" color="primary" className={classes.button}>
+                        Ask
+                    </Button>
+                </CardActions>
+            </Card>
+        </StylesProvider>
     );
 }

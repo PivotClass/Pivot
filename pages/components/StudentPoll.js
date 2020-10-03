@@ -18,6 +18,7 @@ import StarIcon from '@material-ui/icons/Star';
 import HourglassFullIcon from '@material-ui/icons/HourglassFull';
 import WbCloudyIcon from '@material-ui/icons/WbCloudy';
 import { sizing } from '@material-ui/system';
+import { StylesProvider } from '@material-ui/core/styles'
 
 
 const useStyles = makeStyles({
@@ -39,70 +40,72 @@ export default function StudentPoll() {
     const classes = useStyles();
 
     return (
-        <Card className={classes.root} variant="outlined" width="100%">
-            <CardContent>
-                <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    Instructor Poll
-                </Typography>
-                <Typography variant="h5" component="h2">
-                    Chicago is a?
-                </Typography>
-                <Typography className={classes.pos} color="textSecondary">
-                    multiple choice question
-                </Typography>
-                <List dense>
-                    <ListItem>
-                        <ListItemIcon>
-                            <IconButton aria-label="delete" color="primary" size="small">
-                                <LensIcon />
-                            </IconButton>
-                        </ListItemIcon>
-                        <ListItemText
-                            primary="City"
-                        />
-                    </ListItem>
-                    <ListItem>
-                        <ListItemIcon>
-                            <IconButton aria-label="delete" size="small">
-                                <SpaIcon />
-                            </IconButton>
-                        </ListItemIcon>
-                        <ListItemText
-                            primary="Country"
-                        />
-                    </ListItem>
-                    <ListItem>
-                        <ListItemIcon>
-                            <IconButton aria-label="delete" color="primary" size="small">
-                                <StarIcon />
-                            </IconButton>
-                        </ListItemIcon>
-                        <ListItemText
-                            primary="State"
-                        />
-                    </ListItem>
-                    <ListItem>
-                        <ListItemIcon>
-                            <IconButton aria-label="delete" color="primary" size="small">
-                                <HourglassFullIcon />
-                            </IconButton>
-                        </ListItemIcon>
-                        <ListItemText
-                            primary="Town"
-                        />
-                    </ListItem>
-                    <ListItem>
-                        <ListItemIcon>
-                            <IconButton aria-label="delete" color="primary" size="small">
-                                <WbCloudyIcon />
-                            </IconButton>
-                        </ListItemIcon>
-                        <ListItemText
-                            primary="Continent"
-                        />
-                    </ListItem>
-                </List>
-            </CardContent>
-        </Card>
+        <StylesProvider>
+            <Card className={classes.root} variant="outlined" width="100%">
+                <CardContent>
+                    <Typography className={classes.title} color="textSecondary" gutterBottom>
+                        Instructor Poll
+                    </Typography>
+                    <Typography variant="h5" component="h2">
+                        Chicago is a?
+                    </Typography>
+                    <Typography className={classes.pos} color="textSecondary">
+                        multiple choice question
+                    </Typography>
+                    <List dense>
+                        <ListItem>
+                            <ListItemIcon>
+                                <IconButton aria-label="delete" color="primary" size="small">
+                                    <LensIcon />
+                                </IconButton>
+                            </ListItemIcon>
+                            <ListItemText
+                                primary="City"
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                                <IconButton aria-label="delete" size="small">
+                                    <SpaIcon />
+                                </IconButton>
+                            </ListItemIcon>
+                            <ListItemText
+                                primary="Country"
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                                <IconButton aria-label="delete" color="primary" size="small">
+                                    <StarIcon />
+                                </IconButton>
+                            </ListItemIcon>
+                            <ListItemText
+                                primary="State"
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                                <IconButton aria-label="delete" color="primary" size="small">
+                                    <HourglassFullIcon />
+                                </IconButton>
+                            </ListItemIcon>
+                            <ListItemText
+                                primary="Town"
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                                <IconButton aria-label="delete" color="primary" size="small">
+                                    <WbCloudyIcon />
+                                </IconButton>
+                            </ListItemIcon>
+                            <ListItemText
+                                primary="Continent"
+                            />
+                        </ListItem>
+                    </List>
+                </CardContent>
+            </Card>
+        </StylesProvider>
     );
 }

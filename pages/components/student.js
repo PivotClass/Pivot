@@ -9,6 +9,7 @@ import ImageIcon from '@material-ui/icons/Image';
 import WorkIcon from '@material-ui/icons/Work';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import { sizing } from '@material-ui/system';
+import { StylesProvider } from '@material-ui/core/styles'
 
 import StudentPoll from "./StudentPoll"
 import StudentQuestion from "./StudentQuestion"
@@ -27,16 +28,18 @@ export default function StudentFeed() {
     const classes = useStyles();
 
     return (
-        <List className={classes.root} width="100%">
-            <ListItem width="100%">
-                <StudentPoll width="100%"/>
-            </ListItem>
-            <ListItem width="100%">
-                <StudentQuestion width="100%"/>
-            </ListItem>
-            <ListItem width="100%">
-                <Tooltip width="100%"/>
-            </ListItem>
-        </List>
+        <StylesProvider>
+            <List className={classes.root} width="100%">
+                <ListItem width="100%">
+                    <StudentPoll width="100%"/>
+                </ListItem>
+                <ListItem width="100%">
+                    <StudentQuestion width="100%"/>
+                </ListItem>
+                <ListItem width="100%">
+                    <Tooltip width="100%"/>
+                </ListItem>
+            </List>
+        </StylesProvider>
     );
 }
