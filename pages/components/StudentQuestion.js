@@ -22,7 +22,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { sizing } from '@material-ui/system';
 import { StylesProvider } from '@material-ui/core/styles'
 
-const useStyles = makeStyles((theme) => ({
+const studentQuestionStyles = makeStyles((theme) => ({
     root: {
         minWidth: 275,
         width: "100%",
@@ -40,8 +40,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+// Private: Not viewed in shared feed!
 export default function StudentQuestion() {
-    const classes = useStyles();
+    const classes = studentQuestionStyles();
 
     return (
         <StylesProvider>
@@ -68,6 +69,9 @@ export default function StudentQuestion() {
                 <CardActions>
                     <Button variant="outlined" color="primary" className={classes.button}>
                         Ask
+                    </Button>
+                    <Button variant="outlined" color="secondary" className={classes.button}>
+                        Dismiss
                     </Button>
                 </CardActions>
             </Card>

@@ -16,7 +16,7 @@ import TeacherQuestion from "./TeacherQuestion"
 import Tooltip from "./Tooltip"
 import {Style} from "@material-ui/icons";
 
-const useStyles = makeStyles((theme) => ({
+const teacherStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         maxWidth: 450,
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TeacherFeed() {
-    const classes = useStyles();
+    const classes = teacherStyles();
 
     return (
         <StylesProvider>

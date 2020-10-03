@@ -10,7 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import { sizing } from '@material-ui/system';
 import { StylesProvider } from '@material-ui/core/styles'
 
-const useStyles = makeStyles((theme) => ({
+const teacherQuestionStyles = makeStyles((theme) => ({
     root: {
         minWidth: 275,
         width: "100%",
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function StudentPoll() {
-    const classes = useStyles();
+    const classes = teacherQuestionStyles();
 
     return (
         <StylesProvider>

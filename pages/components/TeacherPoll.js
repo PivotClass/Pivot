@@ -22,7 +22,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { sizing } from '@material-ui/system';
 import { StylesProvider } from '@material-ui/core/styles'
 
-const useStyles = makeStyles((theme) => ({
+const teacherPollStyles = makeStyles((theme) => ({
     root: {
         minWidth: 275,
         width: "100%",
@@ -40,8 +40,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+// Private: Not viewed in shared feed.
 export default function TeacherPoll() {
-    const classes = useStyles();
+    const classes = teacherPollStyles();
 
     return (
         <StylesProvider>
