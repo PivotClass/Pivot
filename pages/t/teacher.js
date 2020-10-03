@@ -73,35 +73,8 @@ export default function Teacher(props) {
         }
     };
 
-    // demonstrates roomservice list feature by creating a room and list object
-    function useList(roomName, listName) {
-        const [list, setList] = useState();
 
-        useEffect(() => {
-            async function load() {
-                // calls roomservice client
-                const client = new RoomService({
-                    auth: "/api/roomservice",
-                });
-
-                // creates room from client and list from room
-                console.log("Opening room: " + roomName);
-                const room = await client.room(roomName);
-                const l = await room.list(listName);
-                setList(l);
-
-                room.subscribe(l, (li) => {
-                    console.log(li);
-                    setList(li);
-                });
-            }
-
-            load()
-        }, []);
-        return [list, setList];
-    }
-
-    // demonstrates roomservice map feature by creating a room and map object
+    // useMap hook opens room and associated map object
     function useMap(roomName, mapName) {
         const [map, setMap] = useState();
         useEffect(() => {
@@ -128,52 +101,69 @@ export default function Teacher(props) {
         return [map, setMap];
     }
 
+    // textboxes for poll question and the single-note
+    const [questionTextbox, setQuestionTextbox] = useState("");
+    const [singleNoteTextbox, setSingleNoteTextbox] = useState("");
 
-    function updateListByID() {
-        [list, setList] = useList(props.roomName, "polls");
-    }
-
-    // two different text objects for two different textbooks
-    const [questionText, setQuestionText] = useState("");
-    const [quoteText, setQuoteText] = useState("");
-    const [choiceOne, setChoiceOne] = useState("");
-    const [choiceTwo, setChoiceTwo] = useState("");
-    const [choiceThree, setChoiceThree] = useState("");
-    const [choiceFour, setChoiceFour] = useState("");
-    const [choiceFive, setChoiceFive] = useState("");
+    // bad code, but can't do this in a loop -- React hooks cannot be used in loops, conditionals, etc.
+    const c1 = useState("");
+    const c2 = useState("");
+    const c3 = useState("");
+    const c4 = useState("");
+    const c5 = useState("");
+    const choiceList = [c1, c2, c3, c4, c5];
 
     // initializes map object and setMap method
     const [dataMap, setMap] = useMap(props.roomName, "data");
 
-
-    if (dataMap && !dataMap.get("pollResponses")) {
-        setMap(dataMap.set("pollResponses", []));
-        console.log("SETTING MAP HERE!");
+    if (dataMap && !dataMap.get("initialized")) {
+        initialize();
     }
 
-    // called when teacher data is inputted
-    function onEnterPress(fieldName, text, setText) {
-        if (!dataMap) return;
+    // initialize map data types
+    function initialize() {
+        setMap(dataMap.set("initialized", true));
+        setMap(dataMap.set("poll", {
+            "questionText": "",
+            "responseList": [],
+            "answerOptions": []
+        }));
+        setMap(dataMap.set("singleNote", ""));
+    }
 
+    // sends the poll to the students by updating dataMap
+    function sendPoll() {
+        if (!dataMap || !dataMap.get("initialized")) return;
+        if (questionTextbox == "") {
+            alert("please enter a poll question!");
+            return;
+        }
+        const temp = dataMap.get("poll");
+        temp["questionText"] = questionTextbox;
+        let tempArr = [];
+        for (let i = 0; i < 5; i++) {
+            if (choiceList[i][0] != "") tempArr.push(choiceList[i][0]);
+        }
+        temp["answerOptions"] = tempArr.slice();
+        setMap(dataMap.set("poll", temp));
+    }
+
+    // edit FIRST-ORDER map text fields (may come in handy later on)
+    function setMapTextField(fieldName, text, setText) {
         setMap(dataMap.set(fieldName, text));
         setText("");
-
     }
 
-    if (dataMap) {
-        console.log(dataMap.get("pollQuestion"));
-        console.log(dataMap.get("importantQuote"));
-    }
-
+    // get the student responses return the JSX
     function responses() {
-        if (dataMap && dataMap.get("pollResponses") && typeof dataMap.get("pollResponses") === "object") {
-            console.log(dataMap.get("pollResponses"));
-            return dataMap.get("pollResponses").map(str => {
-                return (<li key={JSON.stringify(str) + "-" + Math.random()}> {str} </li>);
+        if (dataMap && dataMap.get("initialized")) {
+            return dataMap.get("poll")["responseList"].map((str, len) => {
+                return (<li key={len}> {str} </li>);
             });
         }
     }
 
+    // JSX content displayed (mostly self-explanatory)
     return (
         <div style={styles.container}>
             <div>
@@ -194,54 +184,51 @@ export default function Teacher(props) {
                                     Enter a poll question:
                                     {" "}
                                     <TextField
-                                        id="filled-basic"
+                                        id="filled-basic-questionbox"
                                         label="Question"
                                         variant="filled"
                                         fullWidth
                                         style={styles.input}
                                         type="text"
-                                        value={questionText}
-                                        onChange={(e) => setQuestionText(e.target.value)}
-                                        onKeyPress={(e) => {
-                                            if (e.key === "Enter" && questionText !== "") {
-                                                onEnterPress("pollQuestion", questionText, setQuestionText);
-                                            }
-                                        }}
-                                    /> You entered: <b>"{(dataMap && dataMap.get("pollQuestion") ? dataMap.get("pollQuestion") : "")}"</b>
+                                        value={questionTextbox}
+                                        onChange={(e) => setQuestionTextbox(e.target.value)}
+                                        multiline = {true}
+                                    />
                                 </div>
                                 <br/>
                                 <br/>
                                 <div style={styles.widgetText}>
                                     Enter answer choices:
                                     <p style={{fontSize: "14px"}}>Leave all choices blank for short answer.</p>
-                                    <TextField id="filled-basic" label="1." variant="filled" fullWidth size="small"
-                                               style={styles.answerChoice} type="text" value={choiceOne}
-                                               onChange={(e) => setChoiceOne(e.target.value)}
+                                    <TextField id="filled-basic-choice1" label="1." variant="filled" fullWidth size="small"
+                                               style={styles.answerChoice} type="text" value={choiceList[0][0]}
+                                               onChange={(e) => choiceList[0][1](e.target.value)}
                                     />
-                                    <TextField id="filled-basic" label="2." variant="filled" fullWidth size="small"
-                                               style={styles.answerChoice} type="text" value={choiceTwo}
-                                               onChange={(e) => setChoiceTwo(e.target.value)}
+                                    <TextField id="filled-basic-choice2" label="2." variant="filled" fullWidth size="small"
+                                               style={styles.answerChoice} type="text" value={choiceList[1][0]}
+                                               onChange={(e) => choiceList[1][1](e.target.value)}
                                     />
-                                    <TextField id="filled-basic" label="3." variant="filled" fullWidth size="small"
-                                               style={styles.answerChoice} type="text" value={choiceThree}
-                                               onChange={(e) => setChoiceThree(e.target.value)}
+                                    <TextField id="filled-basic-choice3" label="3." variant="filled" fullWidth size="small"
+                                               style={styles.answerChoice} type="text" value={choiceList[2][0]}
+                                               onChange={(e) => choiceList[2][1](e.target.value)}
                                     />
-                                    <TextField id="filled-basic" label="4." variant="filled" fullWidth size="small"
-                                               style={styles.answerChoice} type="text" value={choiceFour}
-                                               onChange={(e) => setChoiceFour(e.target.value)}
+                                    <TextField id="filled-basic-choice4" label="4." variant="filled" fullWidth size="small"
+                                               style={styles.answerChoice} type="text" value={choiceList[3][0]}
+                                               onChange={(e) => choiceList[3][1](e.target.value)}
                                     />
-                                    <TextField id="filled-basic" label="5." variant="filled" fullWidth size="small"
-                                               style={styles.answerChoice} type="text" value={choiceFive}
-                                               onChange={(e) => setChoiceFive(e.target.value)}
+                                    <TextField id="filled-basic-choice5" label="5." variant="filled" fullWidth size="small"
+                                               style={styles.answerChoice} type="text" value={choiceList[4][0]}
+                                               onChange={(e) => choiceList[4][1](e.target.value)}
                                     />
                                     <Button
+                                        onClick={() => { sendPoll(); }}
                                         size="large" variant="outlined" disableElevation>
                                         Send to Students
                                     </Button>
                                 </div>
                                 <br/>
                                 <div>
-                                    <div style={styles.widgetTitle}>Student Results</div>
+                                    <div style={styles.widgetTitle}>Student Results</div> {responses()}
                                 </div>
                             </div>
                         </div>
@@ -264,20 +251,20 @@ export default function Teacher(props) {
                                         Send something to your students:
                                         {' '}
                                         <TextField
-                                            id="filled-basic"
+                                            id="filled-basic-notebox"
                                             label="Note"
                                             variant="filled"
                                             fullWidth
                                             style={styles.input}
                                             type="text"
-                                            value={quoteText}
-                                            onChange={(e) => setQuoteText(e.target.value)}
+                                            value={singleNoteTextbox}
+                                            onChange={(e) => setSingleNoteTextbox(e.target.value)}
                                             onKeyPress={(e) => {
-                                                if (e.key === "Enter" && quoteText !== "") {
-                                                    onEnterPress("importantQuote", quoteText, setQuoteText);
+                                                if (e.key === "Enter" && singleNoteTextbox !== "") {
+                                                    setMapTextField("singleNote", singleNoteTextbox, setSingleNoteTextbox);
                                                 }
                                             }}
-                                        /> You entered: <b>"{(dataMap && dataMap.get("importantQuote") ? dataMap.get("importantQuote") : "")}"</b>
+                                        /> You entered: <b>"{(dataMap && dataMap.get("singleNote") ? dataMap.get("singleNote") : "")}"</b>
                                     </div>
                                 </div>
                             </Grid>
