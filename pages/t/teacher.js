@@ -70,6 +70,10 @@ export default function Teacher(props) {
             marginRight: "auto",
             fontFamily: "Roboto, monospace",
             fontSize: "14px",
+        },
+        pollResponses: {
+            fontSize: "18px",
+            borderBottom: "1px solid black"
         }
     };
 
@@ -114,7 +118,7 @@ export default function Teacher(props) {
     const choiceList = [c1, c2, c3, c4, c5];
 
     // initializes map object and setMap method
-    const [dataMap, setMap] = useMap(props.roomName, "data");
+    const [dataMap, setDataMap] = useMap(props.roomName, "data");
 
     if (dataMap && !dataMap.get("initialized")) {
         initialize();
@@ -122,13 +126,13 @@ export default function Teacher(props) {
 
     // initialize map data types
     function initialize() {
-        setMap(dataMap.set("initialized", true));
-        setMap(dataMap.set("poll", {
+        setDataMap(dataMap.set("initialized", true));
+        setDataMap(dataMap.set("poll", {
             "questionText": "",
             "responseList": [],
             "answerOptions": []
         }));
-        setMap(dataMap.set("singleNote", ""));
+        setDataMap(dataMap.set("singleNote", ""));
     }
 
     // sends the poll to the students by updating dataMap
@@ -145,12 +149,12 @@ export default function Teacher(props) {
             if (choiceList[i][0] != "") tempArr.push(choiceList[i][0]);
         }
         temp["answerOptions"] = tempArr.slice();
-        setMap(dataMap.set("poll", temp));
+        setDataMap(dataMap.set("poll", temp));
     }
 
     // edit FIRST-ORDER map text fields (may come in handy later on)
     function setMapTextField(fieldName, text, setText) {
-        setMap(dataMap.set(fieldName, text));
+        setDataMap(dataMap.set(fieldName, text));
         setText("");
     }
 
@@ -158,7 +162,7 @@ export default function Teacher(props) {
     function responses() {
         if (dataMap && dataMap.get("initialized")) {
             return dataMap.get("poll")["responseList"].map((str, len) => {
-                return (<li key={len}> {str} </li>);
+                return (<p style={styles.pollResponses} key={len}> {str} </p>);
             });
         }
     }

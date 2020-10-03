@@ -27,37 +27,6 @@ export default function Student(props) {
             borderBottom: "1px solid black"
         }
     };
-
-    // initialize map object and setMap function
-    const [dataMap, setMap] = useMap(props.roomName, "data");
-
-
-    function useList(roomName, listName) {
-        const [list, setList] = useState();
-
-        useEffect(() => {
-            async function load() {
-                // calls roomservice client
-                const client = new RoomService({
-                    auth: "/api/roomservice",
-                });
-
-                // creates room from client and list from room
-                console.log("Opening room: " + roomName);
-                const room = await client.room(roomName);
-                const l = await room.list(listName);
-                setList(l);
-
-                room.subscribe(l, (li) => {
-                    console.log(li);
-                    setList(li);
-                });
-            }
-
-            load()
-        }, []);
-        return [list, setList];
-    }
     
     function useMap(roomName, mapName) {
         const [map, setMap] = useState();
@@ -85,38 +54,47 @@ export default function Student(props) {
         return [map, setMap];
     }
 
+    const [dataMap, setDataMap] = useMap(props.roomName, "data");
+
     // generic updating text component
     const [text, setText] = useState("");
 
     // called when poll item is clicked
     function onCheckOff(i) {
-        if (!dataMap || !dataMap.get("pollResponses")) return;
-        const temp = dataMap.get("pollResponses");
-        temp.splice(i, 1);
-        setMap(dataMap.set("pollResponses", temp));
+        if (!dataMap || !dataMap.get("initialized")) return;
+        const temp = dataMap.get("poll");
+        temp["responseList"].splice(i, 1);
+        setDataMap(dataMap.set("poll", temp));
     }
 
     // called when poll item is entered
     function onEnterPress() {
-        if (!dataMap || !dataMap.get("pollResponses")) return;
-        const temp = dataMap.get("pollResponses");
-        temp.push(text);
-        setMap(dataMap.set("pollResponses", temp));
+        if (!dataMap || !dataMap.get("initialized") || dataMap.get("poll")["questionText"] == "") {
+            alert("wait for your teacher to send a poll question!");
+            return;
+        }
+        const temp = dataMap.get("poll");
+        temp["responseList"].push(text);
+        setDataMap(dataMap.set("poll", temp));
         setText("");
     }
 
     return (
         <div style={styles.container}>
             <h1>Room ID: <code>{props.roomName}</code></h1>
-            <h2>Quote of the Day: {' '}
-            <em>
-                "{(dataMap && dataMap.get("importantQuote") ? dataMap.get("importantQuote") : "")}"
-            </em>
-            </h2>
 
-            <h2>Poll Responses</h2>
-            <p><b>(Professor: "{((dataMap && dataMap.get("pollQuestion")) ? dataMap.get("pollQuestion") : "")}")</b></p>
+            <h2>Poll Question: <b><em>{((dataMap && dataMap.get("initialized")) ? dataMap.get("poll")["questionText"] : "")}</em></b></h2>
             {/* textbox component */}
+
+            {(dataMap && dataMap.get("initialized") && dataMap.get("poll")["answerOptions"].length > 0 ? "Answer Choices:" : "")}
+            <ol>
+                {dataMap && dataMap.get("initialized") && 
+                dataMap.get("poll")["answerOptions"].map((option, len) => {
+                    return(
+                        <li id={len} >{option}</li>
+                    );
+                })}
+            </ol>
             <input
                 style={styles.input}
                 type="text"
@@ -128,8 +106,8 @@ export default function Student(props) {
                     }
                 }}
             />
-            {dataMap && typeof dataMap.get("pollResponses") === "object" &&
-            dataMap.get("pollResponses").map((l, i) => (
+            {dataMap && dataMap.get("initialized") &&
+            dataMap.get("poll")["responseList"].map((l, i) => (
                 <p
                     style={styles.pollResponses}
                     key={JSON.stringify(l) + "-" + i}
