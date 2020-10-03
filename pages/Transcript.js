@@ -15,7 +15,8 @@ class Transcript extends React.Component {
                 "url": "wss://api.us-east.speech-to-text.watson.cloud.ibm.com/instances/2ace51cc-2a4e-4e79-abbf-577bcbfedd94/"
             },
             auth_token: "badtoken",
-            count:0
+            count:0 ,
+            transcript_output:""
         };
     };
 
@@ -40,15 +41,10 @@ class Transcript extends React.Component {
 
     handleData(e) {
         if (e.data && e.data.size > 0) {
-            console.log("sending "+ e.data) ;
+            // console.log("sending "+ e.data) ;
             this.websocket.send(e.data);
-            this.setState({count: this.state.count + 1}) ;
         }
-        if (this.state.count >= 6){
-            console.log("Ending message") ;
-            this.setState({count : 0 });
-            this.websocket.send(end_message) ;
-        }
+
 
     }
 
@@ -117,10 +113,36 @@ class Transcript extends React.Component {
             })
 
     } ;
+     traverse(jsonObj) {
+        if( jsonObj !== null && typeof jsonObj == "object" ) {
+            Object.entries(jsonObj).forEach(([key, value]) => {
+                // key is either an array index or object key
+                if(key === "transcript") {
+                    return value ;
+                }else {
+                    // eslint-disable-next-line no-undef
+                    this.traverse(value);
+                }
+            });
+        }
+        else {
+           return  " test " ;
+        }
+    }
     onMessage(evt) {
         console.log("YEEET!!") ;
-        console.log(evt) ;
-        console.log(evt.data) ;
+       // console.log(evt.data) ;
+      // console.log(typeof evt.data) ;
+
+       let transcript_json = JSON.parse(evt.data) ;
+       console.log(transcript_json) ;
+       if(transcript_json.hasOwnProperty('results')) {
+           let lop = JSON.stringify(transcript_json.results[0].alternatives[0].transcript);
+           //console.log(l);
+           this.setState({transcript_output:this.state.transcript_output+ " " + lop}) ;
+
+       }
+
     }
      onOpen(evt) {
         var message = {
@@ -132,11 +154,15 @@ class Transcript extends React.Component {
     }
     onClose(ev) { console.log("CLOSED")}
     onError(ev) {console.log("ERROR!!!!")}
+    getOutput(){
+        console.log("Text Output " + this.state.transcript_output);
+        return this.state.transcript_output;
+    }
 
     render() {
        // const {recording, audios} = this.state;
         return (
-            <div className="camera">
+            <div className="transcript_audio_recording">
                 <audio
 
 
@@ -150,6 +176,11 @@ class Transcript extends React.Component {
                     <button onClick={e => this.startRecording(e)}>Record</button>
                     <button onClick={e => this.stopRecording(e)}>Stop</button>
                 </div>
+                <p >
+                    This is a display
+                    {this.getOutput()}
+                </p>
+
 
             </div>
         )

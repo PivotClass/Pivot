@@ -180,7 +180,7 @@ export default function Teacher(props) {
                     <p style={styles.roomID}>Your room ID is: {props.roomName}</p></Typography>
             </div>
             <div className="App">
-                <Transcript />
+
                 <Grid
                     container
                     justify="center"
@@ -281,6 +281,7 @@ export default function Teacher(props) {
                     </Grid>
                 </Grid>
             </div>
+            <Transcript />
         </div>
 
     );
