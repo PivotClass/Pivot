@@ -112,6 +112,13 @@ export default function Home() {
             top: "35%",
             left: "10%",
         },
+        logo: {
+            display: "block",
+            maxWidth: "30%",
+            marginLeft: "auto",
+            marginRight: "auto",
+            paddingTop: "5%",
+        }
     };
 
     // checks if code is of valid format (NOT YET CHECKING DUPLICATE ROOMS) before redirecting to avoid arbitrary file access
@@ -131,9 +138,10 @@ export default function Home() {
                 duration={3000}
                 angle="45deg">
                 <div style={styles.full}>
-                    <Typography variant="h2" gutterBottom style={styles.h1}>
-                        Welcome to Pivot!
-                    </Typography>
+                    {/*<Typography variant="h2" gutterBottom style={styles.h1}>*/}
+                    {/*    Welcome to Pivot!*/}
+                    {/*</Typography>*/}
+                    <img src='https://i.imgur.com/RcBck61.png' style={styles.logo} />
                     <div style={styles.buttonContainer}>
                         <div>
                             <div className="dropdownDiv">
