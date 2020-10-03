@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Transcript from "../Transcript.js"
 
 export default function Teacher(props) {
 
@@ -179,6 +180,7 @@ export default function Teacher(props) {
                     <p style={styles.roomID}>Your room ID is: {props.roomName}</p></Typography>
             </div>
             <div className="App">
+                <Transcript />
                 <Grid
                     container
                     justify="center"
