@@ -155,7 +155,7 @@ export default function Home() {
                                 </Typography>
                                 <TextField
                                     id="outlined-search"
-                                    type="text"
+                                    // type="text"
                                     variant="outlined"
                                     InputProps={{
                                         style: styles.codeInput,
