@@ -10,7 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import { sizing } from '@material-ui/system';
 import { StylesProvider } from '@material-ui/core/styles'
 
-const useStyles = makeStyles((theme) => ({
+const teacherQuestionStyles = makeStyles((theme) => ({
     root: {
         minWidth: 275,
         width: "100%",
@@ -28,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function StudentPoll() {
-    const classes = useStyles();
+export default function TeacherQuestion(props) {
+    const classes = teacherQuestionStyles();
 
     return (
         <StylesProvider>
@@ -39,18 +39,33 @@ export default function StudentPoll() {
                         Student Question
                     </Typography>
                     <Typography variant="h5" component="h2">
-                        Who is a derivative?
+                        {props.title}
                     </Typography>
                 </CardContent>
-                <Divider variant="middle"/>
-                <CardActions>
-                    <Button variant="outlined" color="primary" className={classes.button}>
-                        Mark Answered
-                    </Button>
-                    <Button variant="outlined" color="secondary" className={classes.button}>
-                        Delete
-                    </Button>
-                </CardActions>
+
+                {
+                    props.answered ?
+                        <>
+                            <Divider variant="middle"/>
+                            <CardActions>
+                                <Button variant="outlined" color="primary" className={classes.button} disabled>
+                                    Answered!
+                                </Button>
+                            </CardActions></>
+                        :
+                        props.teacher ?
+                            <>
+                                <Divider variant="middle"/>
+                                <CardActions>
+                                    <Button variant="outlined" color="primary" className={classes.button}>
+                                        Mark Answered
+                                    </Button>
+                                    <Button variant="outlined" color="secondary" className={classes.button}>
+                                        Delete
+                                    </Button>
+                                </CardActions></>
+                            : null
+                }
             </Card>
         </StylesProvider>
     );

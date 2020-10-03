@@ -10,7 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import { sizing } from '@material-ui/system';
 import { StylesProvider } from '@material-ui/core/styles'
 
-const useStyles = makeStyles((theme) => ({
+const tooltipStyles = makeStyles((theme) => ({
     root: {
         minWidth: 275,
         width: "100%",
@@ -28,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function StudentPoll() {
-    const classes = useStyles();
+export default function StudentPoll(props) {
+    const classes = tooltipStyles();
 
     return (
         <StylesProvider>
@@ -39,13 +39,13 @@ export default function StudentPoll() {
                         Topic
                     </Typography>
                     <Typography variant="h5" component="h2">
-                        l'Hôpital's rule
+                        {props.title}
                     </Typography>
                     <Typography className={classes.pos} color="textSecondary">
-                        (mathematical problem)
+                        {props.subtitle}
                     </Typography>
                     <Typography variant="body2" component="p">
-                        Suppose that lim(f(x)) and lim(g(x)) are both zero or both ±∞. Then l'Hôpital's rule states that if lim(f'(x)/(g'(x))) has a finite limit or the limit is ±∞, then lim(f(x)/(g(x))) = lim(f'(x)/(g'(x))).
+                        {props.content}
                     </Typography>
                 </CardContent>
                 <Divider variant="middle"/>

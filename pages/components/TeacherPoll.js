@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -22,7 +22,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { sizing } from '@material-ui/system';
 import { StylesProvider } from '@material-ui/core/styles'
 
-const useStyles = makeStyles((theme) => ({
+const teacherPollStyles = makeStyles((theme) => ({
     root: {
         minWidth: 275,
         width: "100%",
@@ -40,8 +40,27 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+// Private: Not viewed in shared feed.
 export default function TeacherPoll() {
-    const classes = useStyles();
+    const classes = teacherPollStyles();
+
+    const [answerChoice0, setAnswerChoice0] = useState("");
+    const [answerChoice1, setAnswerChoice1] = useState("");
+    const [answerChoice2, setAnswerChoice2] = useState("");
+    const [answerChoice3, setAnswerChoice3] = useState("");
+    const [answerChoice4, setAnswerChoice4] = useState("");
+
+    const answerChoices = [answerChoice0, answerChoice1, answerChoice2, answerChoice3, answerChoice4]
+    const setAnswerChoices = [setAnswerChoice0, setAnswerChoice1, setAnswerChoice2, setAnswerChoice3, setAnswerChoice4]
+
+    function updateAnswerChoices(str, idx) {
+        setAnswerChoices[idx](str)
+    }
+
+    const [questionTextbox, setQuestionTextbox] = useState("");
+
+    const icons = [<LensIcon/>, <SpaIcon/>, <StarIcon/>, <HourglassFullIcon/>, <WbCloudyIcon/>];
+    const labels = ["Choice A", "Choice B", "Choice C", "Choice D", "Choice E"]
 
     return (
         <StylesProvider>
@@ -54,8 +73,8 @@ export default function TeacherPoll() {
                         fullWidth
                         // style={styles.input}
                         type="text"
-                        // value={questionTextbox}
-                        // onChange={(e) => setQuestionTextbox(e.target.value)}
+                        value={questionTextbox}
+                        onChange={(e) => setQuestionTextbox(e.target.value)}
                         multiline={true}
                         margin={"normal"}
                     />
@@ -63,101 +82,29 @@ export default function TeacherPoll() {
                         Leave all answer choices blank to pose this as a free-response question.
                     </Typography>
                     <List dense>
-                        <ListItem>
-                            <ListItemIcon>
-                                <IconButton aria-label="delete" color="primary" size="small">
-                                    <LensIcon/>
-                                </IconButton>
-                            </ListItemIcon>
-                            <TextField
-                                id="filled-basic-questionbox"
-                                label="Choice A"
-                                variant="outlined"
-                                size={"small"}
-                                fullWidth
-                                // style={styles.input}
-                                type="text"
-                                // value={questionTextbox}
-                                // onChange={(e) => setQuestionTextbox(e.target.value)}
-                                multiline={false}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemIcon>
-                                <IconButton aria-label="delete" size="small">
-                                    <SpaIcon/>
-                                </IconButton>
-                            </ListItemIcon>
-                            <TextField
-                                id="filled-basic-questionbox"
-                                label="Choice B"
-                                variant="outlined"
-                                size={"small"}
-                                fullWidth
-                                // style={styles.input}
-                                type="text"
-                                // value={questionTextbox}
-                                // onChange={(e) => setQuestionTextbox(e.target.value)}
-                                multiline={false}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemIcon>
-                                <IconButton aria-label="delete" color="primary" size="small">
-                                    <StarIcon/>
-                                </IconButton>
-                            </ListItemIcon>
-                            <TextField
-                                id="filled-basic-questionbox"
-                                label="Choice C"
-                                variant="outlined"
-                                size={"small"}
-                                fullWidth
-                                // style={styles.input}
-                                type="text"
-                                // value={questionTextbox}
-                                // onChange={(e) => setQuestionTextbox(e.target.value)}
-                                multiline={false}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemIcon>
-                                <IconButton aria-label="delete" color="primary" size="small">
-                                    <HourglassFullIcon/>
-                                </IconButton>
-                            </ListItemIcon>
-                            <TextField
-                                id="filled-basic-questionbox"
-                                label="Choice D"
-                                variant="outlined"
-                                size={"small"}
-                                fullWidth
-                                // style={styles.input}
-                                type="text"
-                                // value={questionTextbox}
-                                // onChange={(e) => setQuestionTextbox(e.target.value)}
-                                multiline={false}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemIcon>
-                                <IconButton aria-label="delete" color="primary" size="small">
-                                    <WbCloudyIcon/>
-                                </IconButton>
-                            </ListItemIcon>
-                            <TextField
-                                id="filled-basic-questionbox"
-                                label="Choice E"
-                                variant="outlined"
-                                size={"small"}
-                                fullWidth
-                                // style={styles.input}
-                                type="text"
-                                // value={questionTextbox}
-                                // onChange={(e) => setQuestionTextbox(e.target.value)}
-                                multiline={false}
-                            />
-                        </ListItem>
+                        {icons.map((icon, idx) => {
+                            return (
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <IconButton aria-label="delete" color="primary" size="small">
+                                            {icon}
+                                        </IconButton>
+                                    </ListItemIcon>
+                                    <TextField
+                                        id="filled-basic-questionbox"
+                                        label={labels[idx]}
+                                        variant="outlined"
+                                        size={"small"}
+                                        fullWidth
+                                        type="text"
+                                        value={answerChoices[idx]}
+                                        onChange={(e) => updateAnswerChoices(e.target.value, idx)}
+                                        multiline={false}
+                                    />
+                                </ListItem>
+                            );
+                            }
+                        )}
                     </List>
                 </CardContent>
                 <Divider variant="middle"/>
