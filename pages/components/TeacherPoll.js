@@ -67,7 +67,7 @@ export default function TeacherPoll() {
             <Card className={classes.root} variant="outlined" width="100%">
                 <CardContent>
                     <TextField
-                        id="filled-basic-questionbox"
+                        id="filled-basic-questionbox-teacherpoll"
                         label="Instructor Question"
                         variant="outlined"
                         fullWidth
@@ -84,14 +84,14 @@ export default function TeacherPoll() {
                     <List dense>
                         {icons.map((icon, idx) => {
                             return (
-                                <ListItem>
+                                <ListItem key={idx}>
                                     <ListItemIcon>
                                         <IconButton aria-label="delete" color="primary" size="small">
                                             {icon}
                                         </IconButton>
                                     </ListItemIcon>
                                     <TextField
-                                        id="filled-basic-questionbox"
+                                        id={"filled-basic-questionbox-updateanswerchoices-" + idx}
                                         label={labels[idx]}
                                         variant="outlined"
                                         size={"small"}

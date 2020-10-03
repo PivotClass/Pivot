@@ -27,12 +27,12 @@ export default function Cards(props) {
     const classes = cardStyles();
 
     // Creates a card from a cardStruct. I would define a cardStruct type but since js doesn't take types anyways so.
-    function createCard(cardStruct) {
+    function createCard(cardStruct, idx) {
         switch (cardStruct.type) {
             case "poll":
                 if (cardStruct.mcq) {
                     return (
-                        <ListItem width="100%">
+                        <ListItem key={idx} width="100%">
                             <StudentPoll
                                 question={cardStruct.question}
                                 mcq={true}
@@ -42,7 +42,7 @@ export default function Cards(props) {
                     );
                 } else {
                     return (
-                        <ListItem width="100%">
+                        <ListItem key={idx} width="100%">
                             <StudentPoll
                                 question={cardStruct.question}
                                 mcq={false}
@@ -52,7 +52,7 @@ export default function Cards(props) {
                 }
             case "tooltip":
                 return (
-                    <ListItem width="100%">
+                    <ListItem key={idx} width="100%">
                         <Tooltip
                             width="100%"
                             title={cardStruct.title}
@@ -63,7 +63,7 @@ export default function Cards(props) {
                 );
             case "publicQuestion":
                 return (
-                    <ListItem width="100%">
+                    <ListItem key={idx} width="100%">
                         <TeacherQuestion
                             title={cardStruct.title}
                             teacher={props.teacher}
@@ -73,13 +73,13 @@ export default function Cards(props) {
                 )
             case "studentQuestion":
                 return (
-                    <ListItem width="100%">
+                    <ListItem key={idx} width="100%">
                         <StudentQuestion width="100%"/>
                     </ListItem>
                 );
             case "teacherPoll":
                 return (
-                    <ListItem width="100%">
+                    <ListItem key={idx} width="100%">
                         <TeacherPoll width="100%"/>
                     </ListItem>
                 );
@@ -89,7 +89,7 @@ export default function Cards(props) {
     return (
         <StylesProvider>
             <List className={classes.root} width="100%">
-                {props.cardList.map((elt) => createCard(elt))}
+                {props.cardList.map((elt, idx) => createCard(elt, idx))}
             </List>
         </StylesProvider>
     );

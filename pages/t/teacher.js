@@ -193,7 +193,7 @@ export default function Teacher(props) {
                                     Enter a poll question:
                                     {" "}
                                     <TextField
-                                        id="filled-basic-questionbox"
+                                        id="filled-basic-questionbox-teacher"
                                         label="Question"
                                         variant="filled"
                                         fullWidth

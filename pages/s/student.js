@@ -232,7 +232,7 @@ export default function Student(props) {
                                     <div style={styles.widgetText}>
                                         Send an anonymous question:
                                         <TextField
-                                            id="filled-basic-questionbox"
+                                            id="filled-basic-questionbox-student"
                                             label="Question"
                                             variant="filled"
                                             fullWidth

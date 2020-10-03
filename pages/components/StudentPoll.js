@@ -83,9 +83,10 @@ export default function StudentPoll(props) {
             <List dense>
                 {answerChoices.map((answerChoice, idx) => {
                     return (
-                        <ListItem>
+                        <ListItem key={idx}>
                             <ListItemIcon>
-                                <IconButton aria-label="delete"
+                                <IconButton 
+                                            aria-label="delete"
                                             color={currentChoice === idx ? "secondary" : "primary"}
                                             size="small"
                                             onClick={() => clickedAnswerButton(idx)}
@@ -108,7 +109,7 @@ export default function StudentPoll(props) {
         return (
             <>
                 <TextField
-                    id="filled-basic-questionbox"
+                    id="filled-basic-questionbox-answerbox"
                     label="Answer"
                     variant="outlined"
                     fullWidth

@@ -1,5 +1,7 @@
-import React from 'react';
-import Cards from "./Cards"
+import React, { useEffect, useState } from "react";
+import { RoomService } from "@roomservice/browser";
+import Cards from "./Cards";
+
 
 // Example card list that is loaded on components/student.
 const exampleCardList = [
@@ -38,8 +40,48 @@ const exampleCardList = [
     }
 ]
 
+
+
+
+
 // Student feed.
-export default function TeacherClient() {
+export default function TeacherClient(props) {
+    function useList(roomName, listName) {
+        const [list, setList] = useState();
+        useEffect(() => {
+            async function load() {
+                // calls roomservice client
+                const client = new RoomService({
+                    auth: "/api/roomservice",
+                });
+    
+                // creates room from client and map from room
+                console.log("Opening room: " + roomName);
+                const room = await client.room(roomName);
+                const l = await room.map(listName);
+                setList(l);
+    
+                room.subscribe(l, (li) => {
+                    console.log(li);
+                    setList(li);
+                });
+            }
+    
+            load()
+        }, []);
+        return [list, setList];
+    }
+    
+    // const [cardList, setCardList] = useList(11223344, "cards");
+
+    // if (cardList) setCardList(cardList.push("hello"));
+
+    // console.log(cardList);
+
+
+
+
+
     return (
         <Cards cardList={exampleCardList} teacher />
     );
