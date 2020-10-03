@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -44,6 +45,8 @@ const studentQuestionStyles = makeStyles((theme) => ({
 export default function StudentQuestion() {
     const classes = studentQuestionStyles();
 
+    const [questionTextbox, setQuestionTextbox] = useState("");
+
     return (
         <StylesProvider>
             <Card className={classes.root} variant="outlined" width="100%">
@@ -55,8 +58,8 @@ export default function StudentQuestion() {
                         fullWidth
                         // style={styles.input}
                         type="text"
-                        // value={questionTextbox}
-                        // onChange={(e) => setQuestionTextbox(e.target.value)}
+                        value={questionTextbox}
+                        onChange={(e) => setQuestionTextbox(e.target.value)}
                         multiline={true}
                         margin={"normal"}
                     />

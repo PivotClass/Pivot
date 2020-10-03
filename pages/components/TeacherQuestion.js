@@ -28,7 +28,7 @@ const teacherQuestionStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function StudentPoll() {
+export default function TeacherQuestion(props) {
     const classes = teacherQuestionStyles();
 
     return (
@@ -39,18 +39,33 @@ export default function StudentPoll() {
                         Student Question
                     </Typography>
                     <Typography variant="h5" component="h2">
-                        Who is a derivative?
+                        {props.title}
                     </Typography>
                 </CardContent>
-                <Divider variant="middle"/>
-                <CardActions>
-                    <Button variant="outlined" color="primary" className={classes.button}>
-                        Mark Answered
-                    </Button>
-                    <Button variant="outlined" color="secondary" className={classes.button}>
-                        Delete
-                    </Button>
-                </CardActions>
+
+                {
+                    props.answered ?
+                        <>
+                            <Divider variant="middle"/>
+                            <CardActions>
+                                <Button variant="outlined" color="primary" className={classes.button} disabled>
+                                    Answered!
+                                </Button>
+                            </CardActions></>
+                        :
+                        props.teacher ?
+                            <>
+                                <Divider variant="middle"/>
+                                <CardActions>
+                                    <Button variant="outlined" color="primary" className={classes.button}>
+                                        Mark Answered
+                                    </Button>
+                                    <Button variant="outlined" color="secondary" className={classes.button}>
+                                        Delete
+                                    </Button>
+                                </CardActions></>
+                            : null
+                }
             </Card>
         </StylesProvider>
     );
