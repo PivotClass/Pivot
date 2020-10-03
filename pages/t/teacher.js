@@ -110,12 +110,11 @@ export default function Teacher(props) {
     const [singleNoteTextbox, setSingleNoteTextbox] = useState("");
 
     // bad code, but can't do this in a loop -- React hooks cannot be used in loops, conditionals, etc.
-    const c1 = useState("");
-    const c2 = useState("");
-    const c3 = useState("");
-    const c4 = useState("");
-    const c5 = useState("");
-    const choiceList = [c1, c2, c3, c4, c5];
+    const choiceList = []
+    for (let i = 0; i < 5; i++) {
+        choiceList.push(useState(""));
+    }
+
 
     // initializes map object and setMap method
     const [dataMap, setDataMap] = useMap(props.roomName, "data");
@@ -124,14 +123,18 @@ export default function Teacher(props) {
         initialize();
     }
 
-    // initialize map data types
-    function initialize() {
-        setDataMap(dataMap.set("initialized", true));
-        setDataMap(dataMap.set("poll", {
+    function createPoll(pollName) {
+        setDataMap(dataMap.set(pollName, {
             "questionText": "",
             "responseList": [],
             "answerOptions": []
         }));
+    }
+
+    // initialize map data types
+    function initialize() {
+        setDataMap(dataMap.set("initialized", true));
+        createPoll("poll");
         setDataMap(dataMap.set("singleNote", ""));
     }
 
