@@ -141,7 +141,7 @@ export default function Home() {
                     {/*<Typography variant="h2" gutterBottom style={styles.h1}>*/}
                     {/*    Welcome to Pivot!*/}
                     {/*</Typography>*/}
-                    <img src='https://i.imgur.com/RcBck61.png' style={styles.logo} />
+                    <img src='https://github.com/PivotClass/Resources/blob/main/logo.png?raw=true' style={styles.logo} />
                     <div style={styles.buttonContainer}>
                         <div>
                             <div className="dropdownDiv">
