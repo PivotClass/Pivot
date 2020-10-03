@@ -89,7 +89,7 @@ export default function Cards(props) {
     return (
         <StylesProvider>
             <List className={classes.root} width="100%">
-                {props.cardList.map((elt, idx) => createCard(elt, idx))}
+                {props.cardList ? props.cardList.map((elt, idx) => createCard(elt, idx)) : null}
             </List>
         </StylesProvider>
     );
