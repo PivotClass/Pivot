@@ -1,7 +1,8 @@
 ![Pivot Banner](/public/ghbanner.png)
-https://pivotroom.herokuapp.com
 
 ## Overview
+https://pivotroom.herokuapp.com
+
 Pivot is a project created for IvyHacks 2020. You can learn more at our Devpost submission.
 
 ## Installation
