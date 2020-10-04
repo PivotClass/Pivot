@@ -363,12 +363,16 @@ export default function Cards(props) {
             console.log(cardList.toArray());
         }
 
-        function answerTextChanged(txt) {
-            setAnswerText(txt);
+        async function answerTextChanged(txt) {
+            console.log("answerTextChanged");
+            await setAnswerText(txt);
             if (!cardList) return;
+        }
+
+        async function commitAnswerText() {
             const index = getIndexById(props.cardID);
             const temp = cardList.get(index);
-            temp["answers"][props.studentID] = txt;
+            temp["answers"][props.studentID] = answerText;
             setCardList(cardList.set(index, temp));
             console.log("CHANGED");
             console.log(cardList.toArray());
@@ -428,7 +432,8 @@ export default function Cards(props) {
                                 <ListItemIcon>
                                     <IconButton
                                         aria-label="delete"
-                                        color={currentChoice === idx ? "secondary" : "primary"}
+                                        // color={currentChoice === idx ? "secondary" : "primary"}
+                                        color={cardList.get(getIndexById(props.cardID))["answers"][props.studentID] === idx ? "secondary" : "primary"}
                                         size="small"
                                         onClick={() => (!(props.teacherView || props.public) ? clickedAnswerButton(idx) : null)}
                                     >
@@ -463,8 +468,14 @@ export default function Cards(props) {
                         margin={"normal"}
                     />
                     <Typography style={{fontSize: 12, marginBottom: 12,}} color="textSecondary">
-                        {(!props.teacherView ? "Your answer will be recorded automatically. You may change your answer at any time before the poll is closed." : null)}
-                    </Typography></>);
+                        {(!props.teacherView ? "Your answer will be recorded automatically when you click submit. You may resubmit your answer at any time before the poll is closed." : null)}
+                    </Typography>
+                    <Divider/>
+                    <Button variant="outlined" color="primary" style={{margin: "8px 8px 8px 0px",}} size={"small"}
+                            onClick={commitAnswerText}>
+                        Submit
+                    </Button>
+                </>);
         }
 
         return (
@@ -719,7 +730,9 @@ export default function Cards(props) {
                     {reversedCardList ? reversedCardList.map((elt, idx) => {
                         if (elt.type != "teacherPoll" && elt.type != "studentQuestion" && elt.type != "tooltipCreator") return createCard(elt, idx);
                         return;
-                    }) : <Typography style={{textAlign: "center",}}><br /><br /><br />{props.teacherView ? "Create a card to get started!" : "Hang tight! We're loading your cards." }</Typography>}
+                    }) : <Typography
+                        style={{textAlign: "center",}}><br/><br/><br/>{props.teacherView ? "Create a card to get started!" : "Hang tight! We're loading your cards."}
+                    </Typography>}
                 </List>
                 <StudentQuestionDialog open={studentDialogOpen} onClose={handleStudentQuestionClose}/>
                 <TeacherPoll open={teacherPollOpen} onClose={handleTeacherPollClose}/>
