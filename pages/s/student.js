@@ -41,7 +41,8 @@ export default function StudentClient(props) {
             <div>
                 <SplitPane
                     split="vertical"
-                    defaultSize={400}
+                    defaultSize={450}
+                    maxSize={450}
                     primary="second"
                 >
                     <div
