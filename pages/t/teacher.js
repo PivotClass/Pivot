@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RoomService } from "@roomservice/browser";
 import Cards from "../components/Cards";
+import Typography from "@material-ui/core/Typography";
 
 
 // Example card list that is loaded on components/student.
@@ -40,6 +41,27 @@ const exampleCardList = [
         id: "83"
     }
 ].reverse();
+
+const styles = {
+    welcome: {
+        margin: "0 auto",
+        padding: "24px",
+        display: "flex",
+        flexDirection: "column",
+        textAlign: "center",
+        fontFamily: "Roboto, sans-serif",
+        fontSize: "48px",
+    },
+    roomID: {
+        margin: "0 auto",
+        padding: "24px",
+        display: "flex",
+        flexDirection: "column",
+        textAlign: "center",
+        fontFamily: "Roboto, sans-serif",
+        fontSize: "36px",
+    },
+}
 
 
 
@@ -100,8 +122,6 @@ export default function TeacherClient(props) {
         initialize();   
     }
 
-
-
     cardList && console.log(cardList.toArray());
 
     function clearCardList() {
@@ -111,11 +131,16 @@ export default function TeacherClient(props) {
         }
     }
 
-
-
-
-
     return (
-        <Cards teacherView={true} roomName={props.roomName} listName = "cards" cardList={(cardList ? cardList.toArray().reverse() : null)} teacher />
+        <div>
+            <div>
+                <Typography variant="h2" gutterBottom style={styles.welcome}>Welcome, Teacher!
+                    <br/>
+                    <p style={styles.roomID}>Your room ID is: {props.roomName}</p></Typography>
+            </div>
+            <div>
+                <Cards teacherView={true} roomName={props.roomName} listName = "cards" cardList={(cardList ? cardList.toArray().reverse() : null)} teacher />
+            </div>
+        </div>
     );
 }

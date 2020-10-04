@@ -50,7 +50,7 @@ const studentPollStyles = makeStyles((theme) => ({
         transform: 'rotate(180deg)',
     },
     publicPrivateButton: {
-        backgroundColor: "#B0CCDD",
+        //backgroundColor: "#B0CCDD",
     }
 }));
 
@@ -186,6 +186,8 @@ export default function StudentPoll(props) {
                         onClick={togglePublicPrivate}
                         aria-expanded={expanded}
                         aria-label="show more"
+                        variant="outlined"
+                        color="primary"
                     > Make Responses {publicPrivate} 
                     
                     </Button>

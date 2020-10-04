@@ -24,6 +24,14 @@ const cardStyles = makeStyles((theme) => ({
         display: "flex",
         flexDirection: "column",
     },
+    left: {
+        float: "left",
+        width: "50%",
+    },
+    right: {
+        float: "right",
+        width: "50%",
+    }
 }));
 
 export default function Cards(props) {
@@ -105,9 +113,22 @@ export default function Cards(props) {
 
     return (
         <StylesProvider>
-            <List className={classes.root} width="100%">
-                {props.cardList ? props.cardList.map((elt, idx) => createCard(elt, idx)) : null}
-            </List>
+            <div className={classes.left}>
+                <List className={classes.root} width="100%">
+                    {props.cardList ? props.cardList.map((elt, idx) => {
+                        if (elt.type != "teacherPoll" && elt.type != "studentQuestion" && elt.type != "tooltip-creator") return createCard(elt, idx);
+                        return;
+                    }) : null}
+                </List>
+            </div>
+            <div className={classes.right}>
+                <List className={classes.root} width="100%">
+                    {props.cardList ? props.cardList.map((elt, idx) => {
+                        if (elt.type == "teacherPoll" || elt.type == "studentQuestion" || elt.type == "tooltip-creator") return createCard(elt, idx);
+                        return;
+                    }) : null}
+                </List>
+            </div>
         </StylesProvider>
     );
 }
