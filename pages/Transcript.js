@@ -25,6 +25,7 @@ class Transcript extends React.Component {
             auth_token: "badtoken",
             count: 0,
             transcript_output: "",
+            keywords: "No keywords yet"
         };
     };
 
@@ -50,6 +51,11 @@ class Transcript extends React.Component {
         if (e.data && e.data.size > 0) {
             // console.log("sending "+ e.data) ;
             this.websocket.send(e.data);
+            this.setState({count: this.state.count + 1});
+        }
+        if (this.state.count > 2) {
+            this.getKeywords();
+            this.setState({count: 0});
         }
     }
 
@@ -67,7 +73,7 @@ class Transcript extends React.Component {
 
 
     closeConnection() {
-        this.websocket.close();
+        this.websocket.send(end_message);
     }
 
     stopRecording(e) {
@@ -136,12 +142,12 @@ class Transcript extends React.Component {
     }
 
     onMessage(evt) {
-        console.log("YEEET!!");
+        // console.log("YEEET!!");
         // console.log(evt.data) ;
         // console.log(typeof evt.data) ;
 
         let transcript_json = JSON.parse(evt.data);
-        console.log(transcript_json);
+        //console.log(transcript_json);
         if (transcript_json.hasOwnProperty('results')) {
             let lop = transcript_json.results[0].alternatives[0].transcript;
             //console.log(l);
@@ -150,12 +156,28 @@ class Transcript extends React.Component {
         }
 
     }
+    tstFetch(){
+        const proxyurl = "https://cors-anywhere.herokuapp.com/"
+
+        fetch(proxyurl + "https://api.us-east.natural-language-understanding.watson.cloud.ibm.com/instances/eb527962-7dee-4c6f-8625-a5edc0d0583a/v1/analyze?version=2019-07-12", {
+            body: "{\n \"text\": \" " + this.state.transcript_output + ".\",\n\"features\": {\n    \"keywords\": {\n        \"limit\":3\n    }\n  }\n}",
+            headers: {
+                Authorization: "Basic YXBpa2V5OklVZ1RYdy1zSUhpc1B2aTlzb05QLWFLbTQtUVZZSVdlMjAybDYxd0FJc1RD",
+                "Content-Type": "application/json"
+            },
+            method: "POST"
+        }).then(e => e.json()
+        ).then((e) => {
+            console.log("REsponse : " + JSON.stringify(e)) ;
+        })
+    }
 
     onOpen(evt) {
         var message = {
             "action": 'start',
             "content-type": 'audio/webm;codecs=opus',
-            "interim_results": true
+            "interim_results": true,
+            "inactivity_timeout": -1
         };
         this.websocket.send(JSON.stringify(message));
     }
@@ -172,6 +194,32 @@ class Transcript extends React.Component {
         console.log("Text Output " + this.state.transcript_output);
         return this.state.transcript_output;
     }
+
+    getKeywords() {
+        console.log("getting keywords")
+        const proxyurl = "https://cors-anywhere.herokuapp.com/"
+        console.log("Trying to fetch keywords");
+        const response = fetch(proxyurl + "https://api.us-east.natural-language-understanding.watson.cloud.ibm.com/instances/eb527962-7dee-4c6f-8625-a5edc0d0583a/v1/analyze?version=2019-07-12", {
+            body: "{\n \"text\": \" " + this.state.transcript_output + ".\",\n\"features\": {\n    \"keywords\": {\n        \"limit\":3\n    }\n  }\n}",
+            headers: {
+                Authorization: "Basic YXBpa2V5OklVZ1RYdy1zSUhpc1B2aTlzb05QLWFLbTQtUVZZSVdlMjAybDYxd0FJc1RD",
+                "Content-Type": "application/json"
+            },
+            method: "POST"
+        }).then(e => e.json()
+        ).then(e => {
+            console.log(JSON.stringify(e)) ;
+            let temp = "" ;
+            if(e.hasOwnProperty('keywords')) {
+                for (let i = 0; i < e.keywords.length ; i++) {
+                    temp = temp + " " + e.keywords[i].text + " , "  ;
+                }
+                this.setState({keywords:temp}) ;
+            }
+        })
+    }
+
+
 
     render() {
         // const {recording, audios} = this.state;
@@ -226,9 +274,27 @@ class Transcript extends React.Component {
                         <MicIcon style={{marginRight: "8px",}}/>}
                     {this.state.recording ? "Listening..." : "Start Transcription"}
                 </Fab>
+                <Typography
+                    variant="h5"
+                    style={{
+                        position: "absolute",
+                        left: "40px",
+                        right: "40px",
+                        top: "120px",
+
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "bottom",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                    }}
+                    >
+                {this.state.keywords }
+                </Typography>
             </div>
         )
     }
 }
+
 
 export default Transcript;
