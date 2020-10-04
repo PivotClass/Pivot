@@ -76,7 +76,7 @@ export default function TestingPage(props) {
             teacherView={false}
             // roomName={props.roomName}
             roomName={"testingroom"}
-            listName={"cards"}
+            listName={"sharedCardList"}
         />
     );
 }

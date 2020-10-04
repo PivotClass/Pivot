@@ -456,7 +456,8 @@ export default function Cards(props) {
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={answerChoice}
-                                    secondary={(expanded && cardList) ? getFrequency(Object.values(cardList.get(getIndexById(props.cardID))["answers"]), idx) : null} // TODO: Live buttons!
+                                    
+                                    secondary={((props.teacherView || expanded) && cardList) ? getFrequency(Object.values(cardList.get(getIndexById(props.cardID))["answers"]), idx) + (getFrequency(Object.values(cardList.get(getIndexById(props.cardID))["answers"]), idx)==1 ? " student" : " students") + " selected" : null} // TODO: Live buttons!
                                 />
                             </ListItem>
                         );
@@ -508,21 +509,6 @@ export default function Cards(props) {
                         </Typography>
                         {props.mcq ? createListChoices(props.choices) : createAnswerBox()}
                     </CardContent>
-                    {(props.teacherView) ? (
-                        <CardActions width="100%" disableSpacing>
-                            <IconButton
-                                className={clsx(classes.expand, {
-                                    [classes.expandOpen]: expanded,
-                                })}
-                                onClick={() => {
-                                    if (!(expanded && publicPrivate === "private")) handleExpandClick()
-                                }}
-                                aria-expanded={expanded}
-                                aria-label="show more"
-                            >
-                                {expanded ? <VisibilityOffIcon/> : <VisibilityIcon/>}
-                            </IconButton>
-                        </CardActions>) : null}
                     {(props.teacherView) ? (<CardActions width="100%" disableSpacing>
                         {/* This button is for toggling STUDENT visibility; teachers can always see responses */}
                         <Button
@@ -534,12 +520,12 @@ export default function Cards(props) {
                         > {(publicPrivate === "public" ? "Lock Poll" : "Unlock Poll")}
                         </Button>
                     </CardActions>) : null}
-                    {(expanded && !props.mcq) ? <Divider variant="middle"/> : null}
-                    <ul>{(expanded && !props.mcq && cardList) ? (
+                    {((props.teacherView || expanded) && !props.mcq) ? <Divider variant="middle"/> : null}
+                    <ul>{((props.teacherView || expanded) && !props.mcq && cardList) ? (
                         Object.values(cardList.get(getIndexById(props.cardID))["answers"]).map((answer, idx) => {
                             if (answer === "") return;
                             return (<li key={idx}> {answer} </li>);
-                        })
+                        }) 
                     ) : null}</ul>
                 </Card>
             </StylesProvider>
@@ -748,7 +734,7 @@ export default function Cards(props) {
                         style={{textAlign: "center",}}><br/><br/><br/>{props.teacherView ? "Create a card to get started!" : "Hang tight! We're loading your cards."}
                     </Typography>}
                 </List>
-                <StudentQuestionDialog open={studentDialogOpen} onClose={handleStudentQuestionClose}/>
+                <StudentQuestionDialog studentID={props.studentID} open={studentDialogOpen} onClose={handleStudentQuestionClose}/>
                 <TeacherPoll open={teacherPollOpen} onClose={handleTeacherPollClose}/>
                 <TooltipCreator open={tooltipCreatorOpen} onClose={handleTooltipCreatorClose}/>
             </div>
