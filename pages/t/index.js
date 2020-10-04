@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from "react";
 
-
 // Generates a random string of length with chars.
 function randomString(length, chars) {
     var result = '';
@@ -26,7 +25,7 @@ const UnlinkedTeacher = () => {
     }
 
     useEffect(() => {
-        setRoomString(randomString(6, '0123456789abcdefghjklmnpqrstuvwxyz'));
+        setRoomString(randomString(4, '0123456789abcdefghjklmnpqrstuvwxyz'));
     }, []);
 
     if (!roomString) {

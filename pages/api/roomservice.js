@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-
+// room API key
 const API_KEY = process.env.ROOMSERVICE_API_KEY;
 
 // random number generator for username
