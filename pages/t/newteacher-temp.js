@@ -5,6 +5,7 @@ import Transcript from "../Transcript";
 import Filler from "../static-components/Filler";
 import Typography from "@material-ui/core/Typography";
 import Paper from '@material-ui/core/Paper';
+import Split from 'react-split';
 import SplitPane, { Pane } from 'react-split-pane'
 
 // Example card list that is loaded on components/student.
@@ -61,21 +62,21 @@ const exampleCardList = [
 const styles = {
     welcome: {
         margin: "0 auto",
-        padding: "10px",
+        padding: "24px",
         display: "flex",
         flexDirection: "column",
         textAlign: "center",
         fontFamily: "Roboto, sans-serif",
-        fontSize: "30px",
+        fontSize: "48px",
     },
     roomID: {
         margin: "0 auto",
-        padding: "10px",
+        padding: "24px",
         display: "flex",
         flexDirection: "column",
         textAlign: "center",
         fontFamily: "Roboto, sans-serif",
-        fontSize: "20px",
+        fontSize: "36px",
     },
 }
 
@@ -111,7 +112,7 @@ export default function TeacherClient(props) {
     }
 
     // const [cardList, setCardList] = useList(props.roomName, "cards");
-    const [cardList, setCardList] = useList(props.roomName, "cards");
+    const [cardList, setCardList] = useList("testroom", "cards");
 
     function initialize() {
         for (let i = 0; i < exampleCardList.length; i++) {
@@ -171,11 +172,11 @@ export default function TeacherClient(props) {
                         >
                             <Typography variant="h2" gutterBottom style={styles.welcome}>Welcome, Teacher!
                                 <br/>
-                                <p style={styles.roomID}>Your room ID is: <code>{props.roomName}</code></p></Typography>
+                                <p style={styles.roomID}>Your room ID is: {props.roomName}</p></Typography>
                             <Cards
                                 teacherView={true}
                                 // roomName={props.roomName}
-                                roomName={props.roomName}
+                                roomName={"testroom"}
                                 listName={"cards"}
                                 cardList={(cardList ? cardList.toArray().reverse() : null)}
                             />

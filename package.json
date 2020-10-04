@@ -18,6 +18,8 @@
     "react-gradient": "^1.0.2",
     "react-helmet": "^6.1.0",
     "react-scripts": "3.4.3",
+    "react-split": "^2.0.9",
+    "react-split-pane": "^0.1.92",
     "react-websocket": "^2.1.0"
   },
   "scripts": {

@@ -176,7 +176,16 @@ class Transcript extends React.Component {
     render() {
         // const {recording, audios} = this.state;
         return (
-            <div className="transcript_audio_recording">
+            <div
+                className="transcript_audio_recording"
+                style={{
+                    position: "absolute",
+                    top: "0",
+                    bottom: "0",
+                    left: "0",
+                    right: "0",
+                }}
+            >
                 <audio
                     style={{width: 400}}
                     ref={a => {
@@ -184,6 +193,23 @@ class Transcript extends React.Component {
                     }}>
                     <p>Audio stream not available. </p>
                 </audio>
+                <Typography
+                    variant="h4"
+                    style={{
+                        position: "absolute",
+                        left: "40px",
+                        right: "40px",
+                        top: "40px",
+                        bottom: "40px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                    }}
+                    gutterBottom>
+                    {this.state.current_output ? this.state.current_output : "(Transcription hasn't started yet)"}
+                </Typography>
                 <Fab variant="extended"
                      onClick={(e) => {
                          this.state.recording ? this.stopRecording(e) : this.startRecording(e);
@@ -200,23 +226,6 @@ class Transcript extends React.Component {
                         <MicIcon style={{marginRight: "8px",}}/>}
                     {this.state.recording ? "Listening..." : "Start Transcription"}
                 </Fab>
-                <Typography
-                    variant="h4"
-                    style={{
-                        position: "absolute",
-                        left: "70px",
-                        right: "70px",
-                        top: "70px",
-                        bottom: "70px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                    }}
-                    gutterBottom>
-                    {this.state.current_output ? this.state.current_output : "(Transcription hasn't started yet)"}
-                </Typography>
             </div>
         )
     }
