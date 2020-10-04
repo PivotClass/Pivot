@@ -77,8 +77,8 @@ export default function TeacherClient(props) {
                     </div>
                 </SplitPane>
             </div>
-            {/*<Transcript/>*/}
-            <div/>
+            <Transcript/>
+            {/*<div/>*/}
         </SplitPane>
     );
 }

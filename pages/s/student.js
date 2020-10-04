@@ -80,8 +80,8 @@ export default function StudentClient(props) {
                     </div>
                 </SplitPane>
             </div>
-            {/*<TranscriptViewer/>*/}
-            <div/>
+            <TranscriptViewer/>
+            {/*<div/>*/}
         </SplitPane>
     );
 }
