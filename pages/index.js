@@ -116,7 +116,7 @@ export default function Home() {
             paddingTop: "50px",
         },
         logo: {
-            display: "block",
+            display: "flex",
             maxWidth: "600px",
             marginLeft: "auto",
             marginRight: "auto",
@@ -161,7 +161,9 @@ export default function Home() {
                     {/*<Typography variant="h2" gutterBottom style={styles.h1}>*/}
                     {/*    Welcome to Pivot!*/}
                     {/*</Typography>*/}
-                    <img src='https://github.com/PivotClass/Resources/blob/main/logo.png?raw=true' style={styles.logo} />
+                    <div>
+                        <img src='https://github.com/PivotClass/Resources/blob/main/logo.png?raw=true' style={styles.logo} />
+                    </div>
                     <div style={styles.buttonContainer}>
                         <div>
                             <div className="dropdownDiv">
