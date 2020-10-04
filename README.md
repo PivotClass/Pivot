@@ -1,9 +1,10 @@
 ![Pivot Banner](/public/ghbanner.png)
 
 ## Overview
-http://pivoted.space/
+Check it out: http://pivoted.space/
 
 Pivot is a project created for IvyHacks 2020. You can learn more at our [Devpost submission](https://devpost.com/software/pivot-9ytkdq).
+
 You can also find Pivot at https://pivotroom.herokuapp.com
 
 ## Installation
