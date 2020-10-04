@@ -63,23 +63,27 @@ export default function StudentPoll(props) {
         const [list, setList] = useState();
         useEffect(() => {
             let isMounted = true;
-          async function load() {
-            const client = new RoomService({
-              auth: "/api/roomservice",
-            });
-            const room = await client.room(roomName);
-            const l = await room.list(listName);
-            if (isMounted) setList(l);
-      
-            room.subscribe(l, (li) => {
-              console.log(li);
-              if (isMounted) setList(li);
-            });
-          }
-          load();
-          return () => {isMounted=false};
+
+            async function load() {
+                const client = new RoomService({
+                    auth: "/api/roomservice",
+                });
+                const room = await client.room(roomName);
+                const l = await room.list(listName);
+                if (isMounted) setList(l);
+
+                room.subscribe(l, (li) => {
+                    console.log(li);
+                    if (isMounted) setList(li);
+                });
+            }
+
+            load();
+            return () => {
+                isMounted = false
+            };
         }, []);
-      
+
         return [list, setList];
     }
 
@@ -138,8 +142,7 @@ export default function StudentPoll(props) {
                 setCardList(cardList.set(index, temp));
             }
             setPublicPrivate("private");
-        }
-        else {
+        } else {
             if (cardList) {
                 const index = getIndexById(props.cardID);
                 const temp = cardList.get(index);
@@ -147,11 +150,11 @@ export default function StudentPoll(props) {
                 setCardList(cardList.set(index, temp));
             }
             setPublicPrivate("public");
-        }        
+        }
     }
 
     const getFrequency = (arr, value) => {
-        let count=0;
+        let count = 0;
         for (let i = 0; i < arr.length; i++) {
             if (arr[i] == value) count++
         }
@@ -181,11 +184,11 @@ export default function StudentPoll(props) {
                     return (
                         <ListItem key={idx}>
                             <ListItemIcon>
-                                <IconButton 
-                                            aria-label="delete"
-                                            color={currentChoice === idx ? "secondary" : "primary"}
-                                            size="small"
-                                            onClick={() => (!(props.teacherView || props.public) ? clickedAnswerButton(idx) : null)}
+                                <IconButton
+                                    aria-label="delete"
+                                    color={currentChoice === idx ? "secondary" : "primary"}
+                                    size="small"
+                                    onClick={() => (!(props.teacherView || props.public) ? clickedAnswerButton(idx) : null)}
                                 >
                                     {icons[idx]}
                                 </IconButton>
@@ -221,6 +224,7 @@ export default function StudentPoll(props) {
                     {(!props.teacherView ? "Your answer will be recorded automatically. You may change your answer at any time before the poll is closed." : null)}
                 </Typography></>);
     }
+
     return (
         <StylesProvider>
             <Card className={classes.root} variant="outlined" width="100%">
@@ -236,20 +240,21 @@ export default function StudentPoll(props) {
                     </Typography>
                     {props.mcq ? createListChoices(props.choices) : createAnswerBox()}
                 </CardContent>
-                {(props.teacherView) ? (<CardActions width="100%" disableSpacing>
-                    <IconButton
-                        className={clsx(classes.expand, {
-                            [classes.expandOpen]: expanded,
-                        })}
-                        onClick={() => {
-                            if (!(expanded && publicPrivate == "private")) handleExpandClick()
-                        }}
-                        aria-expanded={expanded}
-                        aria-label="show more"
-                    >
-                        {expanded ? <VisibilityOffIcon/> : <VisibilityIcon/>}
-                    </IconButton>
-                </CardActions>) : null}
+                {(props.teacherView) ? (
+                    <CardActions width="100%" disableSpacing>
+                        <IconButton
+                            className={clsx(classes.expand, {
+                                [classes.expandOpen]: expanded,
+                            })}
+                            onClick={() => {
+                                if (!(expanded && publicPrivate == "private")) handleExpandClick()
+                            }}
+                            aria-expanded={expanded}
+                            aria-label="show more"
+                        >
+                            {expanded ? <VisibilityOffIcon/> : <VisibilityIcon/>}
+                        </IconButton>
+                    </CardActions>) : null}
                 {(props.teacherView) ? (<CardActions width="100%" disableSpacing>
                     {/* This button is for toggling STUDENT visibility; teachers can always see responses */}
                     <Button
@@ -259,17 +264,16 @@ export default function StudentPoll(props) {
                         aria-label="show more"
                         variant="outlined"
                         color="primary"
-                    > {(publicPrivate=="public" ? "Lock Poll" : "Unlock Poll")} 
-                    
+                    > {(publicPrivate == "public" ? "Lock Poll" : "Unlock Poll")}
                     </Button>
                 </CardActions>) : null}
                 {(expanded && !props.mcq) ? <Divider variant="middle"/> : null}
                 <ul>{(expanded && !props.mcq && cardList) ? (
-                Object.values(cardList.get(getIndexById(props.cardID))["answers"]).map((answer, idx) => {
+                    Object.values(cardList.get(getIndexById(props.cardID))["answers"]).map((answer, idx) => {
                         if (answer == "") return;
                         return (<li key={idx}> {answer} </li>);
                     })
-                ) : null}</ul> 
+                ) : null}</ul>
             </Card>
         </StylesProvider>
     );
