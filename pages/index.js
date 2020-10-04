@@ -117,7 +117,7 @@ export default function Home() {
         },
         logo: {
             display: "flex",
-            maxWidth: "600px",
+            maxWidth: "550px",
             marginLeft: "auto",
             marginRight: "auto",
             paddingTop: "85px",
