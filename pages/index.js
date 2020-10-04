@@ -110,18 +110,19 @@ export default function Home() {
             flexWrap: "wrap",
             width: "80%",
             height: "30%",
-            position: "absolute",
-            top: "40%",
+            position: "relative",
+            top: "15%",
             left: "10%",
-            paddingTop: "50px",
+            paddingTop: "0px",
         },
         logo: {
             display: "flex",
-            maxWidth: "550px",
+            maxWidth: "40%",
+            minWidth: "300px",
             marginLeft: "auto",
             marginRight: "auto",
             paddingTop: "85px",
-            paddingBottom: "85px",
+            paddingBottom: "0px",
         }
     };
 
