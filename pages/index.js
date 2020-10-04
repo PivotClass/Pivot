@@ -15,6 +15,10 @@ import { Gradient } from 'react-gradient';
 import { StylesProvider } from '@material-ui/core/styles';
 import { styled } from '@material-ui/core/styles';
 
+
+
+
+
 // Gradient colors
 const gradients = [
     ['#ffffff', '#99cafb'],
@@ -144,7 +148,7 @@ export default function Home() {
 
     // checks if code is of valid format (NOT YET CHECKING DUPLICATE ROOMS) before redirecting to avoid arbitrary file access
     function isValid(code) {
-        let codeExp = /^[a-z0-9]{4}$/;
+        let codeExp = /^[a-z0-9]{6}$/;
         return codeExp.test(code);
     }
 

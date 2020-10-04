@@ -6,8 +6,13 @@ import MicOffIcon from '@material-ui/icons/MicOff';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 
-const end_message = {action: 'stop'};
 
+//NEED TO GET THESE TO PROPER LOCATIONS BELOW
+const API_KEY = process.env.ROOMSERVICE_API_KEY;
+const API_URL = process.env.IBM_API_URL;
+
+
+const end_message = {action: 'stop'};
 class Transcript extends React.Component {
     constructor(props) {
         super(props);
@@ -15,13 +20,13 @@ class Transcript extends React.Component {
             recording: false,
             audios: [],
             ibm_creds: {
-                "apikey": "toVMBr2R8hJWaKFsps3WAr72AJrWJf6zQq4qZPO48UBG",
-                "iam_apikey_description": "Auto-generated for key 204f6bfd-1516-4618-b1e7-a4a2708ad99e",
-                "iam_apikey_name": "Prof_Audio",
-                "iam_role_crn": "crn:v1:bluemix:public:iam::::serviceRole:Writer",
-                "iam_serviceid_crn": "crn:v1:bluemix:public:iam-identity::a/cac442f496ab409588522707a014b666::serviceid:ServiceId-96c103b5-7f5d-412d-9447-90060fe7cbca",
-                "url": "wss://api.us-east.speech-to-text.watson.cloud.ibm.com/instances/2ace51cc-2a4e-4e79-abbf-577bcbfedd94/"
-            },
+                    "apikey": "-elRc0A5ej9qNBTsEnN-lFw2bt51Is6NvktfSeDOyRGm",
+                    "iam_apikey_description": "Auto-generated for key 04411748-dd84-4847-ba65-521dda9eb6bc",
+                    "iam_apikey_name": "Prof_Audio",
+                    "iam_role_crn": "crn:v1:bluemix:public:iam::::serviceRole:Writer",
+                    "iam_serviceid_crn": "crn:v1:bluemix:public:iam-identity::a/692a6ff0ff234827881b481d07782700::serviceid:ServiceId-e2c15d13-d93a-4271-9f0b-26a795a5137a",
+                    "url": "wss://api.us-east.speech-to-text.watson.cloud.ibm.com/instances/a765512d-79c9-4e9a-a219-e71e1c33e294"
+                },
             auth_token: "badtoken",
             count: 0,
             transcript_output: "",
@@ -101,7 +106,7 @@ class Transcript extends React.Component {
 
     getToken() {
         const proxyurl = "https://cors-anywhere.herokuapp.com/"
-        const response = fetch(proxyurl + "https://iam.cloud.ibm.com/identity/token?grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=toVMBr2R8hJWaKFsps3WAr72AJrWJf6zQq4qZPO48UBG", {
+        const response = fetch(proxyurl + "https://iam.cloud.ibm.com/identity/token?grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=-elRc0A5ej9qNBTsEnN-lFw2bt51Is6NvktfSeDOyRGm", {
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/x-www-form-urlencoded"
