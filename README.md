@@ -1,9 +1,10 @@
+![Pivot Banner](/public/ghbanner.png)
 # Pivot (IvyHacks 2020)
 https://pivotroom.herokuapp.com
 
-## Installation (instructions for anyone who wants to test it at any point)
+## Installation
 
-We'll deploy this on Heroku later. To run on local server, you will need to download Node.js with NextJS.
+Pivot is already deployed on Heroku. If you want to run it on your local server, you will need to download Node.js with NextJS.
 
 ### Steps
 
