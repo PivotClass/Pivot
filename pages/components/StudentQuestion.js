@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { RoomService } from "@roomservice/browser";
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -42,10 +43,52 @@ const studentQuestionStyles = makeStyles((theme) => ({
 }));
 
 // Private: Not viewed in shared feed!
-export default function StudentQuestion() {
+export default function StudentQuestion(props) {
     const classes = studentQuestionStyles();
 
-    const [questionTextbox, setQuestionTextbox] = useState("");
+
+    function useList(roomName, listName) {
+        const [list, setList] = useState();
+        useEffect(() => {
+            let isMounted = true;
+            async function load() {
+            const client = new RoomService({
+                auth: "/api/roomservice",
+            });
+            const room = await client.room(roomName);
+            const l = await room.list(listName);
+            setList(l);
+        
+            room.subscribe(l, (li) => {
+                console.log(li);
+                if (isMounted) setList(li);
+            });
+            }
+            load();
+            return () => {isMounted=false};
+        }, []);
+        
+        return [list, setList];
+    }
+        const [questionTextbox, setQuestionTextbox] = useState("");
+
+        const [cardList, setCardList] = useList(props.roomName, props.listName);
+
+        function sendPublicQuestion() {
+            if (!cardList) return;
+            if (questionTextbox == "") {
+                alert("please enter a question to ask anonymously!");
+                return;
+            }
+            const newQuestion = {
+                type: "publicQuestion",
+                title: questionTextbox,
+                answered: false,
+                studentID: props.studentID
+            }
+            newQuestion["cardID"] = JSON.stringify(newQuestion) + Math.random();
+            setCardList(cardList.push(newQuestion));
+        }
 
     return (
         <StylesProvider>
@@ -70,11 +113,8 @@ export default function StudentQuestion() {
                 </CardContent>
                 <Divider variant="middle"/>
                 <CardActions>
-                    <Button variant="outlined" color="primary" className={classes.button}>
+                    <Button onClick={sendPublicQuestion}variant="outlined" color="primary" className={classes.button}>
                         Ask
-                    </Button>
-                    <Button variant="outlined" color="secondary" className={classes.button}>
-                        Dismiss
                     </Button>
                 </CardActions>
             </Card>

@@ -10,34 +10,33 @@ const exampleCardList = [
         mcq: true,
         question: "Chicago is a...",
         choices: ["City", "Country", "State", "Town", "Continent"],
-        answers: ["City", "Country", "State", "Town", "Town", "Town"]
+        answers: ["City", "Country", "State", "Town", "Town", "Town"],
     },
     {
         type: "poll",
         mcq: false,
         question: "Fill in what Chicago is!",
-        answers: ["idk", "something", "big", "no u"]
+        answers: ["idk", "something", "big", "no u"],
     },
     {
-        type: "studentQuestion",
-        answers: []
+        type: "studentQuestion"    
     },
     {
         type: "tooltip",
         title: "Derivative",
-        content: "A derivative is the infinitesimal rate of change in a function with respect to one of its parameters."
+        content: "A derivative is the infinitesimal rate of change in a function with respect to one of its parameters.",
     },
     {
-        type: "tooltip-creator"
+        type: "tooltipCreator",
     },
     {
-        type: "teacherPoll"
+        type: "teacherPoll",
     },
     {
         type: "publicQuestion",
         title: "Who is a derivative?",
         answered: false,
-        id: "83"
+        studentID: "73"
     }
 ].reverse();
 
@@ -71,27 +70,12 @@ export default function TeacherClient(props) {
     }
     
     const [cardList, setCardList] = useList(props.roomName, "cards");
-
-    // function pushCard(keyValArray) { 
-    //     if (!cardList) return;
-    //     // example: pushPoll([(type, "studentPoll"), (question, "how are you?"), etc.])
-    //     const cardStruct = {};
-    //     for (let kvPair in keyValArray) {
-    //         const [key, val] = kvPair;
-    //         cardStruct[key] = val;
-    //     }
-    //     console.log("struct:" + cardStruct);
-    //     // setCardList(cardList.push(cardStruct));
-    // } 
-
-    // function pushPoll(mcqVal, questionVal, choicesVal=null) {
-    //     pushCard([['mcq', mcqVal], ['question', questionVal], ['choices', choicesVal]]);
-    // }
-
     
     function initialize() {
         for (let i = 0; i < exampleCardList.length; i++) {
+            exampleCardList[i]["cardID"] = JSON.stringify(exampleCardList[i]) + Math.random();
             setCardList(cardList.push(exampleCardList[i]));
+            console.log(exampleCardList[i]["cardID"]);
         }
     }
     
@@ -111,11 +95,22 @@ export default function TeacherClient(props) {
         }
     }
 
+    const digitize = (integer, numDigits=8) => {
+        var str = '' + integer;
+        while (str.length < numDigits) {
+            str = '0' + str;
+        }
+        return str;
+    }
 
 
 
 
     return (
-        <Cards teacherView={true} roomName={props.roomName} listName = "cards" cardList={(cardList ? cardList.toArray().reverse() : null)} teacher />
+        <Cards teacherView={true} 
+               roomName={props.roomName} 
+               listName = "cards" 
+               cardList={(cardList ? cardList.toArray().reverse() : null)}
+        />
     );
 }

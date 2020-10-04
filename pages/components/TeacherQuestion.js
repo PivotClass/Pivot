@@ -58,13 +58,13 @@ export default function TeacherQuestion(props) {
 
     const [cardList, setCardList] = useList(props.roomName, props.listName);
 
-    function deleteElement(id) {
+    function deleteQuestion(id) {
         if (!cardList) return;
         setCardList(cardList.delete(getIndexById(id)));
     }
 
     function answerQuestion(id) {
-        console.log("A");
+        console.log(id);
         if (!cardList) return;
         const currentStruct = cardList.get(getIndexById(id));
         currentStruct['answered'] = true;
@@ -74,7 +74,7 @@ export default function TeacherQuestion(props) {
     function getIndexById(id) {
         if (!cardList) return -1;
         for (let i = 0; i < cardList.toArray().length; i++) {
-            if (cardList.get(i)['id'] == id) return i;
+            if (cardList.get(i)["cardID"] == id) return i;
         }
         console.log("NOT FOUND");
         return -1;
@@ -103,20 +103,25 @@ export default function TeacherQuestion(props) {
                                     Answered!
                                 </Button>
                             </CardActions></>
-                        :
-                        props.teacher ?
-                            <>
-                                <Divider variant="middle"/>
-                                <CardActions>
-                                    <Button onClick={() => {answerQuestion(props.id)}} variant="outlined" color="primary" className={classes.button}>
-                                        Mark Answered
-                                    </Button>
-                                    <Button onClick={() => {deleteElement(props.id)}} variant="outlined" color="secondary" className={classes.button}>
-                                        Delete
-                                    </Button>
-                                </CardActions></>
-                            : null
-                }
+                            
+                            : (props.teacherView ?
+                                <>
+                                    <Divider variant="middle"/>
+                                    <CardActions>
+                                        <Button onClick={() => {answerQuestion(props.cardID)}} variant="outlined" color="primary" className={classes.button}>
+                                            Mark Answered
+                                        </Button>
+                                        <Button onClick={() => {deleteQuestion(props.cardID)}} variant="outlined" color="secondary" className={classes.button}>
+                                            Delete
+                                        </Button>
+                                    </CardActions></>
+                                : (props.authorID===props.viewerID ?
+                                    <>
+                                    <Button onClick={() => {deleteQuestion(props.cardID)}}variant="outlined" color="secondary" className={classes.button}>
+                                        Dismiss Question
+                                    </Button></>
+                                    : null))}
+
             </Card>
         </StylesProvider>
     );

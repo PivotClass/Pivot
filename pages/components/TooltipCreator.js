@@ -85,6 +85,7 @@ export default function TooltipCreator(props) {
             type: "tooltip",
             content: tooltipTextbox
         }
+        newTooltip["cardID"] = JSON.stringify(newTooltip) + Math.random();
         setCardList(cardList.push(newTooltip));
     }
 

@@ -146,7 +146,7 @@ export default function StudentPoll(props) {
                     margin={"normal"}
                 />
                 <Typography className={classes.pos} color="textSecondary">
-                    Your answer will be recorded automatically. You may change your answer at any time.
+                    {(!props.teacherView ? "Your answer will be recorded automatically. You may change your answer at any time." : null)}
                 </Typography></>);
     }
 

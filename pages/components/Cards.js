@@ -69,17 +69,20 @@ export default function Cards(props) {
                         />
                     </ListItem>
                 );
-            case "tooltip-creator": 
-                return (
+            case "tooltipCreator": 
+                if (props.teacherView) return (
                     <ListItem key={idx} width="100%">
                         <TooltipCreator roomName={props.roomName} listName="cards" width="100%"/>
                     </ListItem>
                 );
+                else return;
             case "publicQuestion":
                 return (
                     <ListItem key={idx} width="100%">
                         <TeacherQuestion
-                            id={cardStruct.id}
+                            cardID={cardStruct.cardID}
+                            authorID={cardStruct.studentID}
+                            viewerID={props.studentID}
                             roomName={props.roomName} 
                             listName="cards"
                             title={cardStruct.title}
@@ -89,17 +92,19 @@ export default function Cards(props) {
                     </ListItem>
                 )
             case "studentQuestion":
-                return (
+                if (!props.teacherView) return (
                     <ListItem key={idx} width="100%">
-                        <StudentQuestion width="100%"/>
+                        <StudentQuestion studentID={props.studentID} roomName={props.roomName} listName={props.listName} width="100%"/>
                     </ListItem>
                 );
+                else return;
             case "teacherPoll":
-                return (
+                if (props.teacherView) return (
                     <ListItem key={idx} width="100%">
                         <TeacherPoll roomName={props.roomName} listName="cards" width="100%"/>
                     </ListItem>
                 );
+                else return;
         }
     }
 

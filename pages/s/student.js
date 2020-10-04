@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { RoomService } from "@roomservice/browser";
 import Cards from "../components/Cards";
 
+const studentID = '' + Math.random() + '' + Math.random() + '' + Math.random() + '' + Math.random();
 
 // Student feed.
 export default function StudentClient(props) {
@@ -32,8 +33,15 @@ export default function StudentClient(props) {
     const [cardList, setCardList] = useList(props.roomName, "cards");
 
 
+    console.log("studentID: " + studentID);
+
 
     return (
-        <Cards teacherView={false} roomName={props.roomName} listName = "cards" cardList={(cardList ? cardList.toArray().reverse() : null)} />
+        <Cards 
+        studentID={studentID} 
+        teacherView={false} 
+        roomName={props.roomName} 
+        listName = "cards" 
+        cardList={(cardList ? cardList.toArray().reverse() : null)} />
     );
 }

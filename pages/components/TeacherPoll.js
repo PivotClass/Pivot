@@ -103,6 +103,7 @@ export default function TeacherPoll(props) {
             answers: []
         }
         if (!isEmpty(answerChoices)) newPoll["choices"] = answerChoices.slice();
+        newPoll["cardID"] = JSON.stringify(newPoll) + math.random();
         setCardList(cardList.push(newPoll));
     }
 
