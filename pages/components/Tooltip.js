@@ -28,9 +28,8 @@ const tooltipStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function StudentPoll(props) {
+export default function Tooltip(props) {
     const classes = tooltipStyles();
-
     return (
         <StylesProvider>
             <Card className={classes.root} variant="outlined" width="100%">
