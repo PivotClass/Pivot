@@ -36,7 +36,8 @@ export default function TranscriptViewer(props) {
                 }}
                 gutterBottom>
                 // TODO: change this.state.current_output to transcript from teacher.
-                {this.state.current_output ? this.state.current_output : "(Transcription hasn't started yet)"}
+                // {this.state.current_output ? this.state.current_output : "(Transcription hasn't started yet)"}
+                (Transcription hasn't started yet)
             </Typography>
         </div>
     )
