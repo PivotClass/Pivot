@@ -49,7 +49,11 @@ const studentPollStyles = makeStyles((theme) => ({
     expandOpen: {
         transform: 'rotate(180deg)',
     },
+    publicPrivateButton: {
+        backgroundColor: "#B0CCDD",
+    }
 }));
+
 
 // Public: Viewed in shared feed!
 export default function StudentPoll(props) {
@@ -61,6 +65,10 @@ export default function StudentPoll(props) {
     const [answerText, setAnswerText] = useState("");
 
     const [expanded, setExpanded] = React.useState(false);
+
+    
+    const [publicPrivate, setPublicPrivate] = useState("public");
+
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -78,10 +86,26 @@ export default function StudentPoll(props) {
         setAnswerText(txt);
     }
 
+    const togglePublicPrivate = () => {
+        if (!(expanded && publicPrivate == "public")) handleExpandClick();
+        if (publicPrivate == "public") setPublicPrivate("private");
+        else setPublicPrivate("public");
+    }
+
+    const getFrequency = (arr, value) => {
+        let count=0;
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] == value) count++
+        }
+        return count;
+    }
+
+
     function createListChoices(answerChoices) {
         return (
             <List dense>
                 {answerChoices.map((answerChoice, idx) => {
+                    if (answerChoice == "") return;
                     return (
                         <ListItem key={idx}>
                             <ListItemIcon>
@@ -89,14 +113,14 @@ export default function StudentPoll(props) {
                                             aria-label="delete"
                                             color={currentChoice === idx ? "secondary" : "primary"}
                                             size="small"
-                                            onClick={() => clickedAnswerButton(idx)}
+                                            onClick={() => (!props.teacherView ? clickedAnswerButton(idx) : null)}
                                 >
                                     {icons[idx]}
                                 </IconButton>
                             </ListItemIcon>
                             <ListItemText
                                 primary={answerChoice}
-                                secondary={expanded ? "3" : null} // TODO: Live buttons!
+                                secondary={expanded ? getFrequency(props.answers, answerChoice) : null} // TODO: Live buttons!
                             />
                         </ListItem>
                     );
@@ -140,18 +164,36 @@ export default function StudentPoll(props) {
                     </Typography>
                     {props.mcq ? createListChoices(props.choices) : createAnswerBox()}
                 </CardContent>
-                <CardActions width="100%" disableSpacing>
+                {props.teacherView ? (<CardActions width="100%" disableSpacing>
                     <IconButton
                         className={clsx(classes.expand, {
                             [classes.expandOpen]: expanded,
                         })}
-                        onClick={handleExpandClick}
+                        onClick={() => {
+                            if (!(expanded && publicPrivate == "private")) handleExpandClick()
+                        }}
                         aria-expanded={expanded}
                         aria-label="show more"
                     >
                         {expanded ? <VisibilityOffIcon/> : <VisibilityIcon/>}
                     </IconButton>
-                </CardActions>
+                </CardActions>) : null}
+                {(props.teacherView) ? (<CardActions width="100%" disableSpacing>
+                    {/* This button is for toggling STUDENT visibility; teachers can always see responses */}
+                    <Button
+                        className={classes.publicPrivateButton}
+                        onClick={togglePublicPrivate}
+                        aria-expanded={expanded}
+                        aria-label="show more"
+                    > Make Responses {publicPrivate} 
+                    
+                    </Button>
+                </CardActions>) : null}
+                <ul>{(expanded && !props.mcq) ? (
+                    props.answers.map((answer, idx) => {
+                        return (<li key={idx}> {answer} </li>);
+                    })
+                ) : null}</ul> 
             </Card>
         </StylesProvider>
     );

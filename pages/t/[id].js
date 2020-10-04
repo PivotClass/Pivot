@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Teacher from './teacher'
+import TeacherClient from './teacher'
 import { useRouter } from 'next/router'
 
 // Student screen *with* ID component, loads into room corresponding to ID.
@@ -10,7 +10,7 @@ const LinkedTeacher = () => {
     if (!id) {
         return <div/>;
     } else {
-        return <Teacher roomName={id}/>;
+        return <TeacherClient roomName={id}/>;
     }
 }
 

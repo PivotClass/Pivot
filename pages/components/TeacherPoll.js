@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { RoomService } from "@roomservice/browser";
+
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -41,7 +43,7 @@ const teacherPollStyles = makeStyles((theme) => ({
 }));
 
 // Private: Not viewed in shared feed.
-export default function TeacherPoll() {
+export default function TeacherPoll(props) {
     const classes = teacherPollStyles();
 
     const [answerChoice0, setAnswerChoice0] = useState("");
@@ -61,6 +63,54 @@ export default function TeacherPoll() {
 
     const icons = [<LensIcon/>, <SpaIcon/>, <StarIcon/>, <HourglassFullIcon/>, <WbCloudyIcon/>];
     const labels = ["Choice A", "Choice B", "Choice C", "Choice D", "Choice E"]
+
+    function useList(roomName, listName) {
+        const [list, setList] = useState();
+      
+        useEffect(() => {
+          async function load() {
+            const client = new RoomService({
+              auth: "/api/roomservice",
+            });
+            const room = await client.room(roomName);
+            const l = await room.list(listName);
+            setList(l);
+      
+            room.subscribe(l, (li) => {
+              console.log(li);
+              setList(li);
+            });
+          }
+          load();
+        }, []);
+      
+        return [list, setList];
+    }
+
+    const [cardList, setCardList] = useList(props.roomName, props.listName)
+
+    function sendPoll() {
+        if (!cardList) return;
+        if (questionTextbox == "") {
+            alert("please enter a poll question!");
+            return;
+        }
+        const newPoll = {
+            type: "poll",
+            mcq: !isEmpty(answerChoices),
+            question: questionTextbox,
+        }
+        if (!isEmpty(answerChoices)) newPoll["choices"] = answerChoices.slice();
+        setCardList(cardList.push(newPoll));
+    }
+
+    function isEmpty(stringArr) {
+        for (let i = 0; i < stringArr; i++) {
+            if (stringArr[i] == "") return true;
+        }
+        return false;
+    }
+
 
     return (
         <StylesProvider>
@@ -109,7 +159,7 @@ export default function TeacherPoll() {
                 </CardContent>
                 <Divider variant="middle"/>
                 <CardActions>
-                    <Button variant="outlined" color="primary" className={classes.button}>
+                    <Button onClick={() => sendPoll()} variant="outlined" color="primary" className={classes.button}>
                         Poll Students
                     </Button>
                 </CardActions>

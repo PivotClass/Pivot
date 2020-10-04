@@ -20,6 +20,8 @@ const cardStyles = makeStyles((theme) => ({
         width: '100%',
         maxWidth: 450,
         backgroundColor: theme.palette.background.paper,
+        display: "flex",
+        flexDirection: "column",
     },
 }));
 
@@ -34,9 +36,11 @@ export default function Cards(props) {
                     return (
                         <ListItem key={idx} width="100%">
                             <StudentPoll
+                                answers={cardStruct.answers}
                                 question={cardStruct.question}
                                 mcq={true}
                                 choices={cardStruct.choices}
+                                teacherView={props.teacherView}
                                 width="100%"/>
                         </ListItem>
                     );
@@ -44,8 +48,10 @@ export default function Cards(props) {
                     return (
                         <ListItem key={idx} width="100%">
                             <StudentPoll
+                                answers={cardStruct.answers}
                                 question={cardStruct.question}
                                 mcq={false}
+                                teacherView={props.teacherView}
                                 width="100%"/>
                         </ListItem>
                     );
@@ -65,6 +71,9 @@ export default function Cards(props) {
                 return (
                     <ListItem key={idx} width="100%">
                         <TeacherQuestion
+                            id={cardStruct.id}
+                            roomName={props.roomName} 
+                            listName="cards"
                             title={cardStruct.title}
                             teacher={props.teacher}
                             answered={cardStruct.answered}
@@ -80,7 +89,7 @@ export default function Cards(props) {
             case "teacherPoll":
                 return (
                     <ListItem key={idx} width="100%">
-                        <TeacherPoll width="100%"/>
+                        <TeacherPoll roomName={props.roomName} listName="cards" width="100%"/>
                     </ListItem>
                 );
         }
