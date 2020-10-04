@@ -66,8 +66,8 @@ export default function TeacherPoll(props) {
 
     function useList(roomName, listName) {
         const [list, setList] = useState();
-      
         useEffect(() => {
+            let isMounted = true;
           async function load() {
             const client = new RoomService({
               auth: "/api/roomservice",
@@ -78,10 +78,11 @@ export default function TeacherPoll(props) {
       
             room.subscribe(l, (li) => {
               console.log(li);
-              setList(li);
+              if (isMounted) setList(li);
             });
           }
           load();
+          return () => {isMounted=false};
         }, []);
       
         return [list, setList];
@@ -99,16 +100,18 @@ export default function TeacherPoll(props) {
             type: "poll",
             mcq: !isEmpty(answerChoices),
             question: questionTextbox,
+            answers: []
         }
         if (!isEmpty(answerChoices)) newPoll["choices"] = answerChoices.slice();
         setCardList(cardList.push(newPoll));
     }
 
     function isEmpty(stringArr) {
-        for (let i = 0; i < stringArr; i++) {
-            if (stringArr[i] == "") return true;
+        for (let i = 0; i < stringArr.length; i++) {
+            if (stringArr[i] !== "") return false; 
         }
-        return false;
+        console.log(stringArr)
+        return true;
     }
 
 

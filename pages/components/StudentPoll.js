@@ -133,6 +133,7 @@ export default function StudentPoll(props) {
         return (
             <>
                 <TextField
+                    disabled={props.teacherView}
                     id="filled-basic-questionbox-answerbox"
                     label="Answer"
                     variant="outlined"

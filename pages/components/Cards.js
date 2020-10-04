@@ -13,6 +13,7 @@ import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import TeacherPoll from "./TeacherPoll";
 import TeacherQuestion from "./TeacherQuestion";
+import TooltipCreator from './TooltipCreator';
 
 // Card styles.
 const cardStyles = makeStyles((theme) => ({
@@ -61,10 +62,17 @@ export default function Cards(props) {
                     <ListItem key={idx} width="100%">
                         <Tooltip
                             width="100%"
+                            teacherView={props.teacherView}
                             title={cardStruct.title}
                             subtitle={cardStruct.subtitle}
                             content={cardStruct.content}
                         />
+                    </ListItem>
+                );
+            case "tooltip-creator": 
+                return (
+                    <ListItem key={idx} width="100%">
+                        <TooltipCreator roomName={props.roomName} listName="cards" width="100%"/>
                     </ListItem>
                 );
             case "publicQuestion":
@@ -75,7 +83,7 @@ export default function Cards(props) {
                             roomName={props.roomName} 
                             listName="cards"
                             title={cardStruct.title}
-                            teacher={props.teacher}
+                            teacherView={props.teacherView}
                             answered={cardStruct.answered}
                             width="100%"/>
                     </ListItem>

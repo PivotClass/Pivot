@@ -34,8 +34,8 @@ export default function TeacherQuestion(props) {
 
     function useList(roomName, listName) {
         const [list, setList] = useState();
-      
         useEffect(() => {
+            let isMounted = true;
           async function load() {
             const client = new RoomService({
               auth: "/api/roomservice",
@@ -46,10 +46,11 @@ export default function TeacherQuestion(props) {
       
             room.subscribe(l, (li) => {
               console.log(li);
-              setList(li);
+              if (isMounted) setList(li);
             });
           }
           load();
+          return () => {isMounted=false};
         }, []);
       
         return [list, setList];

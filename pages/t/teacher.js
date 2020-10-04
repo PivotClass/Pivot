@@ -28,10 +28,7 @@ const exampleCardList = [
         content: "A derivative is the infinitesimal rate of change in a function with respect to one of its parameters."
     },
     {
-        type: "tooltip",
-        title: "l'Hôpital's rule",
-        subtitle: "(mathematical problem)",
-        content: "Suppose that lim(f(x)) and lim(g(x)) are both zero or both ±∞. Then l'Hôpital's rule states that if lim(f'(x)/(g'(x))) has a finite limit or the limit is ±∞, then lim(f(x)/(g(x))) = lim(f'(x)/(g'(x)))."
+        type: "tooltip-creator"
     },
     {
         type: "teacherPoll"
@@ -51,8 +48,8 @@ const exampleCardList = [
 export default function TeacherClient(props) {
     function useList(roomName, listName) {
         const [list, setList] = useState();
-      
         useEffect(() => {
+            let isMounted = true;
           async function load() {
             const client = new RoomService({
               auth: "/api/roomservice",
@@ -63,14 +60,15 @@ export default function TeacherClient(props) {
       
             room.subscribe(l, (li) => {
               console.log(li);
-              setList(li);
+              if (isMounted) setList(li);
             });
           }
           load();
+          return () => {isMounted=false};
         }, []);
       
         return [list, setList];
-      }
+    }
     
     const [cardList, setCardList] = useList(props.roomName, "cards");
 

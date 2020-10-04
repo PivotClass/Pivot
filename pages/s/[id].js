@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Student from '../components/student'
+import Student from './student'
 import { useRouter } from 'next/router'
 
 // Student screen *with* ID component, loads into room corresponding to ID.
