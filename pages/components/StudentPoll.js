@@ -207,7 +207,7 @@ export default function StudentPoll(props) {
                 <TextField
                     disabled={props.teacherView || props.public}
                     id="filled-basic-questionbox-answerbox"
-                    label="Answer"
+                    label={(!props.public ? "Answer" : "Locked")}
                     variant="outlined"
                     fullWidth
                     // style={styles.input}
@@ -259,13 +259,14 @@ export default function StudentPoll(props) {
                         aria-label="show more"
                         variant="outlined"
                         color="primary"
-                    > Make Responses {publicPrivate} 
+                    > {(publicPrivate=="public" ? "Lock Poll" : "Unlock Poll")} 
                     
                     </Button>
                 </CardActions>) : null}
                 {(expanded && !props.mcq) ? <Divider variant="middle"/> : null}
                 <ul>{(expanded && !props.mcq && cardList) ? (
                 Object.values(cardList.get(getIndexById(props.cardID))["answers"]).map((answer, idx) => {
+                        if (answer == "") return;
                         return (<li key={idx}> {answer} </li>);
                     })
                 ) : null}</ul> 
