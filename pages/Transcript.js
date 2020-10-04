@@ -280,7 +280,7 @@ class Transcript extends React.Component {
                         position: "absolute",
                         left: "40px",
                         right: "40px",
-                        top: "120px",
+                        bottom: "10px",
 
                         display: "flex",
                         justifyContent: "center",
