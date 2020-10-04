@@ -328,7 +328,7 @@ export default function Cards(props) {
                             fontSize: 12,
                             marginBottom: 12,
                         }} color="textSecondary">
-                            Enter a message you wish to broadcast to students. You may leave the content blank if you wish to only broadcast a short note. 
+                            Enter a message you wish to broadcast to students. You may leave the content blank if you wish to only broadcast a short note.
                         </Typography>
                     </DialogContent>
                     <Divider/>
@@ -486,7 +486,7 @@ export default function Cards(props) {
                     </Typography>
                     <Divider/>
                     <Button variant="outlined" color="primary" style={{margin: "8px 8px 8px 0px",}} size={"small"}
-                            onClick={commitAnswerText}>
+                            onClick={commitAnswerText} disabled={props.teacherView || props.public}>
                         Submit
                     </Button>
                 </>);
