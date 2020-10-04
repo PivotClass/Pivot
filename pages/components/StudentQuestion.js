@@ -57,7 +57,7 @@ export default function StudentQuestion(props) {
             });
             const room = await client.room(roomName);
             const l = await room.list(listName);
-            setList(l);
+            if (isMounted) setList(l);
         
             room.subscribe(l, (li) => {
                 console.log(li);

@@ -74,7 +74,7 @@ export default function TeacherPoll(props) {
             });
             const room = await client.room(roomName);
             const l = await room.list(listName);
-            setList(l);
+            if (isMounted) setList(l);
       
             room.subscribe(l, (li) => {
               console.log(li);
@@ -88,10 +88,14 @@ export default function TeacherPoll(props) {
         return [list, setList];
     }
 
+
     const [cardList, setCardList] = useList(props.roomName, props.listName)
 
+    
     function sendPoll() {
+
         if (!cardList) return;
+        console.log(cardList.toArray());
         if (questionTextbox == "") {
             alert("please enter a poll question!");
             return;
@@ -100,10 +104,11 @@ export default function TeacherPoll(props) {
             type: "poll",
             mcq: !isEmpty(answerChoices),
             question: questionTextbox,
-            answers: []
+            answers: [],
+            responsesPublic: false
         }
         if (!isEmpty(answerChoices)) newPoll["choices"] = answerChoices.slice();
-        newPoll["cardID"] = JSON.stringify(newPoll) + math.random();
+        newPoll["cardID"] = JSON.stringify(newPoll) + Math.random();
         setCardList(cardList.push(newPoll));
     }
 
@@ -111,7 +116,6 @@ export default function TeacherPoll(props) {
         for (let i = 0; i < stringArr.length; i++) {
             if (stringArr[i] !== "") return false; 
         }
-        console.log(stringArr)
         return true;
     }
 

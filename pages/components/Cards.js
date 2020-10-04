@@ -24,6 +24,14 @@ const cardStyles = makeStyles((theme) => ({
         display: "flex",
         flexDirection: "column",
     },
+    left: {
+        float: "left",
+        width: "50%",
+    },
+    right: {
+        float: "right",
+        width: "50%",
+    }
 }));
 
 export default function Cards(props) {
@@ -37,6 +45,10 @@ export default function Cards(props) {
                     return (
                         <ListItem key={idx} width="100%">
                             <StudentPoll
+                                // cardID={cardStruct.cardID}
+                                roomName={props.roomName}
+                                listName={props.listName}
+                                // public={cardStruct.responsesPublic}
                                 answers={cardStruct.answers}
                                 question={cardStruct.question}
                                 mcq={true}
@@ -49,9 +61,14 @@ export default function Cards(props) {
                     return (
                         <ListItem key={idx} width="100%">
                             <StudentPoll
+                                // cardID={cardStruct.cardID}
+                                roomName={props.roomName}
+                                listName={props.listName}
+                                // public={cardStruct.responsesPublic}
                                 answers={cardStruct.answers}
                                 question={cardStruct.question}
                                 mcq={false}
+                                choices={cardStruct.choices}
                                 teacherView={props.teacherView}
                                 width="100%"/>
                         </ListItem>
@@ -72,7 +89,7 @@ export default function Cards(props) {
             case "tooltipCreator": 
                 if (props.teacherView) return (
                     <ListItem key={idx} width="100%">
-                        <TooltipCreator roomName={props.roomName} listName="cards" width="100%"/>
+                        <TooltipCreator roomName={props.roomName} listName={props.listName} width="100%"/>
                     </ListItem>
                 );
                 else return;
@@ -84,7 +101,7 @@ export default function Cards(props) {
                             authorID={cardStruct.studentID}
                             viewerID={props.studentID}
                             roomName={props.roomName} 
-                            listName="cards"
+                            listName={props.listName}
                             title={cardStruct.title}
                             teacherView={props.teacherView}
                             answered={cardStruct.answered}
@@ -101,7 +118,7 @@ export default function Cards(props) {
             case "teacherPoll":
                 if (props.teacherView) return (
                     <ListItem key={idx} width="100%">
-                        <TeacherPoll roomName={props.roomName} listName="cards" width="100%"/>
+                        <TeacherPoll roomName={props.roomName} listName={props.listName} width="100%"/>
                     </ListItem>
                 );
                 else return;
@@ -110,9 +127,22 @@ export default function Cards(props) {
 
     return (
         <StylesProvider>
-            <List className={classes.root} width="100%">
-                {props.cardList ? props.cardList.map((elt, idx) => createCard(elt, idx)) : null}
-            </List>
+            <div className={classes.left}>
+                <List className={classes.root} width="100%">
+                    {props.cardList ? props.cardList.map((elt, idx) => {
+                        if (elt.type != "teacherPoll" && elt.type != "studentQuestion" && elt.type != "tooltipCreator") return createCard(elt, idx);
+                        return;
+                    }) : null}
+                </List>
+            </div>
+            <div className={classes.right}>
+                <List className={classes.root} width="100%">
+                    {props.cardList ? props.cardList.map((elt, idx) => {
+                        if (elt.type == "teacherPoll" || elt.type == "studentQuestion" || elt.type == "tooltipCreator") return createCard(elt, idx);
+                        return;
+                    }) : null}
+                </List>
+            </div>
         </StylesProvider>
     );
 }

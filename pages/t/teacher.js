@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RoomService } from "@roomservice/browser";
 import Cards from "../components/Cards";
+import Typography from "@material-ui/core/Typography";
 
 
 // Example card list that is loaded on components/student.
@@ -11,12 +12,14 @@ const exampleCardList = [
         question: "Chicago is a...",
         choices: ["City", "Country", "State", "Town", "Continent"],
         answers: ["City", "Country", "State", "Town", "Town", "Town"],
+        responsesPublic: false
     },
     {
         type: "poll",
         mcq: false,
         question: "Fill in what Chicago is!",
         answers: ["idk", "something", "big", "no u"],
+        responsesPublic: false
     },
     {
         type: "studentQuestion"    
@@ -40,6 +43,27 @@ const exampleCardList = [
     }
 ].reverse();
 
+const styles = {
+    welcome: {
+        margin: "0 auto",
+        padding: "24px",
+        display: "flex",
+        flexDirection: "column",
+        textAlign: "center",
+        fontFamily: "Roboto, sans-serif",
+        fontSize: "48px",
+    },
+    roomID: {
+        margin: "0 auto",
+        padding: "24px",
+        display: "flex",
+        flexDirection: "column",
+        textAlign: "center",
+        fontFamily: "Roboto, sans-serif",
+        fontSize: "36px",
+    },
+}
+
 
 
 
@@ -55,7 +79,7 @@ export default function TeacherClient(props) {
             });
             const room = await client.room(roomName);
             const l = await room.list(listName);
-            setList(l);
+            if (isMounted) setList(l);
       
             room.subscribe(l, (li) => {
               console.log(li);
@@ -75,7 +99,7 @@ export default function TeacherClient(props) {
         for (let i = 0; i < exampleCardList.length; i++) {
             exampleCardList[i]["cardID"] = JSON.stringify(exampleCardList[i]) + Math.random();
             setCardList(cardList.push(exampleCardList[i]));
-            console.log(exampleCardList[i]["cardID"]);
+            console.log(cardList.toArray());
         }
     }
     
@@ -84,33 +108,29 @@ export default function TeacherClient(props) {
         initialize();   
     }
 
-
-
-    cardList && console.log(cardList.toArray());
-
     function clearCardList() {
         if (!cardList) return;
         while (cardList.toArray().length > 0) {
             setCardList(cardList.delete(0));
         }
     }
-
-    const digitize = (integer, numDigits=8) => {
-        var str = '' + integer;
-        while (str.length < numDigits) {
-            str = '0' + str;
-        }
-        return str;
-    }
-
-
-
+        
 
     return (
-        <Cards teacherView={true} 
-               roomName={props.roomName} 
-               listName = "cards" 
-               cardList={(cardList ? cardList.toArray().reverse() : null)}
-        />
+        <div>
+            <div>
+                <Typography variant="h2" gutterBottom style={styles.welcome}>Welcome, Teacher!
+                    <br/>
+                    <p style={styles.roomID}>Your room ID is: {props.roomName}</p></Typography>
+            </div>
+            <div>
+                <Cards 
+                teacherView={true} 
+                roomName={props.roomName} 
+                listName = {"cards"}
+                cardList={(cardList ? cardList.toArray().reverse() : null)}
+                />            
+            </div>
+        </div>
     );
 }

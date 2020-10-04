@@ -42,7 +42,7 @@ export default function TeacherQuestion(props) {
             });
             const room = await client.room(roomName);
             const l = await room.list(listName);
-            setList(l);
+            if (isMounted) setList(l);
       
             room.subscribe(l, (li) => {
               console.log(li);
@@ -64,7 +64,6 @@ export default function TeacherQuestion(props) {
     }
 
     function answerQuestion(id) {
-        console.log(id);
         if (!cardList) return;
         const currentStruct = cardList.get(getIndexById(id));
         currentStruct['answered'] = true;
@@ -76,7 +75,6 @@ export default function TeacherQuestion(props) {
         for (let i = 0; i < cardList.toArray().length; i++) {
             if (cardList.get(i)["cardID"] == id) return i;
         }
-        console.log("NOT FOUND");
         return -1;
     }
 

@@ -16,7 +16,7 @@ export default function StudentClient(props) {
             });
             const room = await client.room(roomName);
             const l = await room.list(listName);
-            setList(l);
+            if (isMounted) setList(l);
       
             room.subscribe(l, (li) => {
               console.log(li);
@@ -33,7 +33,6 @@ export default function StudentClient(props) {
     const [cardList, setCardList] = useList(props.roomName, "cards");
 
 
-    console.log("studentID: " + studentID);
 
 
     return (

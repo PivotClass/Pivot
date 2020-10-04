@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { RoomService } from "@roomservice/browser";
+
+
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -50,13 +53,39 @@ const studentPollStyles = makeStyles((theme) => ({
         transform: 'rotate(180deg)',
     },
     publicPrivateButton: {
-        backgroundColor: "#B0CCDD",
+        //backgroundColor: "#B0CCDD",
     }
 }));
 
 
 // Public: Viewed in shared feed!
 export default function StudentPoll(props) {
+    function useList(roomName, listName) {
+        const [list, setList] = useState();
+        useEffect(() => {
+            let isMounted = true;
+          async function load() {
+            const client = new RoomService({
+              auth: "/api/roomservice",
+            });
+            const room = await client.room(roomName);
+            const l = await room.list(listName);
+            if (isMounted) setList(l);
+      
+            room.subscribe(l, (li) => {
+              console.log(li);
+              if (isMounted) setList(li);
+            });
+          }
+          load();
+          return () => {isMounted=false};
+        }, []);
+      
+        return [list, setList];
+    }
+
+    // const [cardList, setCardList] = useList(props.roomName, props.listName)
+
     const classes = studentPollStyles();
 
     const icons = [<LensIcon/>, <SpaIcon/>, <StarIcon/>, <HourglassFullIcon/>, <WbCloudyIcon/>];
@@ -88,8 +117,26 @@ export default function StudentPoll(props) {
 
     const togglePublicPrivate = () => {
         if (!(expanded && publicPrivate == "public")) handleExpandClick();
-        if (publicPrivate == "public") setPublicPrivate("private");
-        else setPublicPrivate("public");
+        if (publicPrivate == "public") {
+            // if (cardList) {
+            //     const index = getIndexById(props.cardID);
+            //     const temp = cardList.get(index);
+            //     temp["responsesPublic"] = true;
+            //     setCardList(cardList.set(index, temp));
+            // }
+            setPublicPrivate("private");
+        }
+        else {
+            // if (cardList) {
+            //     const index = getIndexById(props.cardID);
+            //     const temp = cardList.get(index);
+            //     temp["responsesPublic"] = false;
+            //     setCardList(cardList.set(index, temp));
+            // }
+            setPublicPrivate("public");
+        }
+
+        
     }
 
     const getFrequency = (arr, value) => {
@@ -99,6 +146,15 @@ export default function StudentPoll(props) {
         }
         return count;
     }
+
+
+    // function getIndexById(id) {
+    //     if (!cardList) return -1;
+    //     for (let i = 0; i < cardList.toArray().length; i++) {
+    //         if (cardList.get(i)["cardID"] == id) return i;
+    //     }
+    //     return -1;
+    // }
 
 
     function createListChoices(answerChoices) {
@@ -149,7 +205,6 @@ export default function StudentPoll(props) {
                     {(!props.teacherView ? "Your answer will be recorded automatically. You may change your answer at any time." : null)}
                 </Typography></>);
     }
-
     return (
         <StylesProvider>
             <Card className={classes.root} variant="outlined" width="100%">
@@ -165,7 +220,7 @@ export default function StudentPoll(props) {
                     </Typography>
                     {props.mcq ? createListChoices(props.choices) : createAnswerBox()}
                 </CardContent>
-                {props.teacherView ? (<CardActions width="100%" disableSpacing>
+                {(props.teacherView) ? (<CardActions width="100%" disableSpacing>
                     <IconButton
                         className={clsx(classes.expand, {
                             [classes.expandOpen]: expanded,
@@ -186,6 +241,8 @@ export default function StudentPoll(props) {
                         onClick={togglePublicPrivate}
                         aria-expanded={expanded}
                         aria-label="show more"
+                        variant="outlined"
+                        color="primary"
                     > Make Responses {publicPrivate} 
                     
                     </Button>
