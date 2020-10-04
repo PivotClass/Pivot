@@ -13,7 +13,7 @@ function getRandomInt(min, max) {
 // the request/response template from the roomservice documentation
 export default async (req, res) => {
   const body = req.body;
-  const user = "user-" + JSON.stringify(getRandomInt(1000000, 10000000)) + JSON.stringify(getRandomInt(1000000, 10000000)) + JSON.stringify(getRandomInt(1000000, 10000000)) + JSON.stringify(getRandomInt(1000000, 10000000));
+  const user = "user-" + (getRandomInt(1000000, 10000000)) + '' + (getRandomInt(1000000, 10000000));
 
   const r = await fetch("https://super.roomservice.dev/provision", {
     method: "post",

@@ -45,10 +45,11 @@ export default function Cards(props) {
                     return (
                         <ListItem key={idx} width="100%">
                             <StudentPoll
-                                // cardID={cardStruct.cardID}
+                                studentID={props.studentID}
+                                cardID={cardStruct.cardID}
                                 roomName={props.roomName}
                                 listName={props.listName}
-                                // public={cardStruct.responsesPublic}
+                                public={cardStruct.responsesPublic}
                                 answers={cardStruct.answers}
                                 question={cardStruct.question}
                                 mcq={true}
@@ -61,10 +62,10 @@ export default function Cards(props) {
                     return (
                         <ListItem key={idx} width="100%">
                             <StudentPoll
-                                // cardID={cardStruct.cardID}
+                                cardID={cardStruct.cardID}
                                 roomName={props.roomName}
                                 listName={props.listName}
-                                // public={cardStruct.responsesPublic}
+                                public={cardStruct.responsesPublic}
                                 answers={cardStruct.answers}
                                 question={cardStruct.question}
                                 mcq={false}

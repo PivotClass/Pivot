@@ -57,7 +57,6 @@ const studentPollStyles = makeStyles((theme) => ({
     }
 }));
 
-
 // Public: Viewed in shared feed!
 export default function StudentPoll(props) {
     function useList(roomName, listName) {
@@ -84,7 +83,7 @@ export default function StudentPoll(props) {
         return [list, setList];
     }
 
-    // const [cardList, setCardList] = useList(props.roomName, props.listName)
+    const [cardList, setCardList] = useList(props.roomName, props.listName)
 
     const classes = studentPollStyles();
 
@@ -94,49 +93,61 @@ export default function StudentPoll(props) {
     const [answerText, setAnswerText] = useState("");
 
     const [expanded, setExpanded] = React.useState(false);
-
-    
-    const [publicPrivate, setPublicPrivate] = useState("public");
-
+    const [publicPrivate, setPublicPrivate] = useState((props.public ? "private" : "public"));
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
     function clickedAnswerButton(idx) {
+        console.log("HERE");
+        if (!cardList) return;
+        const index = getIndexById(props.cardID);
+        const temp = cardList.get(index);
         if (idx === currentChoice) {
-            setCurrentChoice(-1)
+            setCurrentChoice(-1);
+            temp["answers"][props.studentID] = -1;
+
         } else {
-            setCurrentChoice(idx)
+            setCurrentChoice(idx);
+            temp["answers"][props.studentID] = idx;
+
         }
+        setCardList(cardList.set(index, temp));
+        console.log(cardList.toArray());
     }
 
     function answerTextChanged(txt) {
         setAnswerText(txt);
+        if (!cardList) return;
+        const index = getIndexById(props.cardID);
+        const temp = cardList.get(index);
+        temp["answers"][props.studentID] = txt;
+        setCardList(cardList.set(index, temp));
+        console.log("CHANGED");
+        console.log(cardList.toArray());
     }
 
     const togglePublicPrivate = () => {
         if (!(expanded && publicPrivate == "public")) handleExpandClick();
         if (publicPrivate == "public") {
-            // if (cardList) {
-            //     const index = getIndexById(props.cardID);
-            //     const temp = cardList.get(index);
-            //     temp["responsesPublic"] = true;
-            //     setCardList(cardList.set(index, temp));
-            // }
+            if (cardList) {
+                const index = getIndexById(props.cardID);
+                const temp = cardList.get(index);
+                temp["responsesPublic"] = true;
+                setCardList(cardList.set(index, temp));
+            }
             setPublicPrivate("private");
         }
         else {
-            // if (cardList) {
-            //     const index = getIndexById(props.cardID);
-            //     const temp = cardList.get(index);
-            //     temp["responsesPublic"] = false;
-            //     setCardList(cardList.set(index, temp));
-            // }
+            if (cardList) {
+                const index = getIndexById(props.cardID);
+                const temp = cardList.get(index);
+                temp["responsesPublic"] = false;
+                setCardList(cardList.set(index, temp));
+            }
             setPublicPrivate("public");
-        }
-
-        
+        }        
     }
 
     const getFrequency = (arr, value) => {
@@ -148,14 +159,19 @@ export default function StudentPoll(props) {
     }
 
 
-    // function getIndexById(id) {
-    //     if (!cardList) return -1;
-    //     for (let i = 0; i < cardList.toArray().length; i++) {
-    //         if (cardList.get(i)["cardID"] == id) return i;
-    //     }
-    //     return -1;
-    // }
+    function getIndexById(id) {
+        if (!cardList) return -1;
+        for (let i = 0; i < cardList.toArray().length; i++) {
+            if (cardList.get(i)["cardID"] == id) return i;
+        }
+        return -1;
+    }
 
+
+    if (!props.teacherView) {
+        if (props.public && !expanded) setExpanded(true);
+        if (!props.public && expanded) setExpanded(false);
+    }
 
     function createListChoices(answerChoices) {
         return (
@@ -169,14 +185,14 @@ export default function StudentPoll(props) {
                                             aria-label="delete"
                                             color={currentChoice === idx ? "secondary" : "primary"}
                                             size="small"
-                                            onClick={() => (!props.teacherView ? clickedAnswerButton(idx) : null)}
+                                            onClick={() => (!(props.teacherView || props.public) ? clickedAnswerButton(idx) : null)}
                                 >
                                     {icons[idx]}
                                 </IconButton>
                             </ListItemIcon>
                             <ListItemText
                                 primary={answerChoice}
-                                secondary={expanded ? getFrequency(props.answers, answerChoice) : null} // TODO: Live buttons!
+                                secondary={(expanded && cardList) ? getFrequency(Object.values(cardList.get(getIndexById(props.cardID))["answers"]), idx) : null} // TODO: Live buttons!
                             />
                         </ListItem>
                     );
@@ -189,7 +205,7 @@ export default function StudentPoll(props) {
         return (
             <>
                 <TextField
-                    disabled={props.teacherView}
+                    disabled={props.teacherView || props.public}
                     id="filled-basic-questionbox-answerbox"
                     label="Answer"
                     variant="outlined"
@@ -202,7 +218,7 @@ export default function StudentPoll(props) {
                     margin={"normal"}
                 />
                 <Typography className={classes.pos} color="textSecondary">
-                    {(!props.teacherView ? "Your answer will be recorded automatically. You may change your answer at any time." : null)}
+                    {(!props.teacherView ? "Your answer will be recorded automatically. You may change your answer at any time before the poll is closed." : null)}
                 </Typography></>);
     }
     return (
@@ -247,8 +263,9 @@ export default function StudentPoll(props) {
                     
                     </Button>
                 </CardActions>) : null}
-                <ul>{(expanded && !props.mcq) ? (
-                    props.answers.map((answer, idx) => {
+                {(expanded && !props.mcq) ? <Divider variant="middle"/> : null}
+                <ul>{(expanded && !props.mcq && cardList) ? (
+                Object.values(cardList.get(getIndexById(props.cardID))["answers"]).map((answer, idx) => {
                         return (<li key={idx}> {answer} </li>);
                     })
                 ) : null}</ul> 

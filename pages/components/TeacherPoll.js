@@ -104,7 +104,7 @@ export default function TeacherPoll(props) {
             type: "poll",
             mcq: !isEmpty(answerChoices),
             question: questionTextbox,
-            answers: [],
+            answers: {},
             responsesPublic: false
         }
         if (!isEmpty(answerChoices)) newPoll["choices"] = answerChoices.slice();

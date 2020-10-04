@@ -11,14 +11,26 @@ const exampleCardList = [
         mcq: true,
         question: "Chicago is a...",
         choices: ["City", "Country", "State", "Town", "Continent"],
-        answers: ["City", "Country", "State", "Town", "Town", "Town"],
+        answers: {
+            "idA": 2,
+            "idB": 0,
+            "idC": 1,
+            "idD": 3,
+            "idE": 0
+        },
         responsesPublic: false
     },
     {
         type: "poll",
         mcq: false,
         question: "Fill in what Chicago is!",
-        answers: ["idk", "something", "big", "no u"],
+        answers: {
+            "idA": "idk",
+            "idB": "do u know",
+            "idC": "sure",
+            "idD": "i'm tired",
+            "idE": "who is a derivative"
+        },
         responsesPublic: false
     },
     {
@@ -114,7 +126,6 @@ export default function TeacherClient(props) {
             setCardList(cardList.delete(0));
         }
     }
-        
 
     return (
         <div>
