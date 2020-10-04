@@ -12,7 +12,8 @@ import MuiAlert from '@material-ui/lab/Alert';
 import CreateIcon from '@material-ui/icons/Create';
 import React from 'react';
 import { Gradient } from 'react-gradient';
-import { StylesProvider } from '@material-ui/core/styles'
+import { StylesProvider } from '@material-ui/core/styles';
+import { styled } from '@material-ui/core/styles';
 
 // Gradient colors
 const gradients = [
@@ -63,6 +64,7 @@ export default function Home() {
             display: "block",
             textAlign: "center",
             fontWeight: "700",
+            fontSize: "22px",
         },
         button: {
             display: "inline-block",
@@ -97,7 +99,7 @@ export default function Home() {
             textAlign: "center",
             marginTop: "5px",
             marginBottom: "10px",
-            width: "180.641px",
+            width: "314px",
         },
         buttonContainer: {
             background: "transparent",
@@ -111,15 +113,33 @@ export default function Home() {
             position: "absolute",
             top: "35%",
             left: "10%",
+            paddingTop: "50px",
         },
         logo: {
             display: "block",
-            maxWidth: "30%",
+            maxWidth: "600px",
             marginLeft: "auto",
             marginRight: "auto",
-            paddingTop: "5%",
+            paddingTop: "85px",
+            paddingBottom: "85px",
         }
     };
+
+    const MyButton = styled(Button)({
+        display: "inline-block",
+        padding: "0.35em 1.2em",
+        //border: "0.1em solid #FFFFFF",
+        margin: "0 0.2em 2.0em 0",
+        //borderRadius: "0.12em",
+        boxSizing: "border-box",
+        textDecoration: "none",
+        fontFamily: "Roboto, sans-serif",
+        fontSize: "30px",
+        textAlign: "center",
+        transition: "all 0.2s",
+        flexDirection: "row",
+        cursor: "pointer",
+    });
 
     // checks if code is of valid format (NOT YET CHECKING DUPLICATE ROOMS) before redirecting to avoid arbitrary file access
     function isValid(code) {
@@ -147,11 +167,11 @@ export default function Home() {
                             <div className="dropdownDiv">
                                 <Link href='/t/'>
                                     <Tooltip title="Create a new teacher room">
-                                        <Button
+                                        <MyButton
                                             size="large" variant="contained" color="primary" disableElevation
                                             endIcon={<CreateIcon/>}>
                                             I'm a teacher
-                                        </Button>
+                                        </MyButton>
                                     </Tooltip>
                                 </Link>
                             </div>
@@ -182,12 +202,12 @@ export default function Home() {
                                 <div className="dropdownDiv">
                                     <Link href={"/s/" + (isValid(studentCode) ? studentCode : "")} passHref>
                                         <Tooltip title="Join a student room">
-                                            <Button
+                                            <MyButton
                                                 size="large" variant="contained" color="secondary" disableElevation
                                                 endIcon={<FaceIcon/>}
                                                 type="submit">
                                                 I'm a student
-                                            </Button>
+                                            </MyButton>
                                         </Tooltip>
                                     </Link>
                                 </div>
