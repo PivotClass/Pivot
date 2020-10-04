@@ -275,6 +275,7 @@ export default function Cards(props) {
 
     function TooltipCreator(props) {
         const [tooltipTextbox, setTooltipTextbox] = useState("");
+        const [tooltipContent, setTooltipContent] = useState("");
 
         function sendTooltip() {
             if (!cardList) return;
@@ -284,7 +285,8 @@ export default function Cards(props) {
             }
             const newTooltip = {
                 type: "tooltip",
-                content: tooltipTextbox
+                title: tooltipTextbox,
+                content: tooltipContent,
             }
             newTooltip["cardID"] = JSON.stringify(newTooltip) + Math.random();
             setCardList(cardList.push(newTooltip));
@@ -300,7 +302,7 @@ export default function Cards(props) {
                     <DialogContent style={{backgroundColor: "lightpink",}}>
                         <TextField
                             id="filled-basic-questionbox-tooltip"
-                            label="Instructor Tip"
+                            label="Title"
                             variant="outlined"
                             fullWidth
                             // style={styles.input}
@@ -310,11 +312,23 @@ export default function Cards(props) {
                             multiline={true}
                             margin={"normal"}
                         />
+                        <TextField
+                            id="filled-basic-questionbox-tooltip"
+                            label="Content"
+                            variant="outlined"
+                            fullWidth
+                            // style={styles.input}
+                            type="text"
+                            value={tooltipContent}
+                            onChange={(e) => setTooltipContent(e.target.value)}
+                            multiline={true}
+                            margin={"normal"}
+                        />
                         <Typography style={{
                             fontSize: 12,
                             marginBottom: 12,
                         }} color="textSecondary">
-                            Enter a message you think will be helpful to students.
+                            Enter a message you wish to broadcast to students. You may leave the content blank if you wish to only broadcast a short note. 
                         </Typography>
                     </DialogContent>
                     <Divider/>

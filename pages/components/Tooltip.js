@@ -35,7 +35,8 @@ export default function Tooltip(props) {
             <Card className={classes.root} variant="outlined" width="100%">
                 <CardContent>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
-                        Topic
+                        {/*Topic*/}
+                        Instructor Note
                     </Typography>
                     <Typography variant="h5" component="h2">
                         {props.title}
@@ -47,12 +48,12 @@ export default function Tooltip(props) {
                         {props.content}
                     </Typography>
                 </CardContent>
-                <Divider variant="middle"/>
-                <CardActions>
-                    <Button variant="outlined" color="primary" className={classes.button} size={"small"}>
-                        Learn More
-                    </Button>
-                </CardActions>
+                {/*<Divider variant="middle"/>*/}
+                {/*<CardActions>*/}
+                {/*    <Button variant="outlined" color="primary" className={classes.button} size={"small"}>*/}
+                {/*        Learn More*/}
+                {/*    </Button>*/}
+                {/*</CardActions>*/}
             </Card>
         </StylesProvider>
     );
