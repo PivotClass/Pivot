@@ -1,5 +1,13 @@
 import React from 'react' ;
-const end_message = {action: 'stop'} ;
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import MicIcon from '@material-ui/icons/Mic';
+import MicOffIcon from '@material-ui/icons/MicOff';
+import Typography from '@material-ui/core/Typography';
+import Fab from '@material-ui/core/Fab';
+
+const end_message = {action: 'stop'};
+
 class Transcript extends React.Component {
     constructor(props) {
         super(props);
@@ -15,15 +23,15 @@ class Transcript extends React.Component {
                 "url": "wss://api.us-east.speech-to-text.watson.cloud.ibm.com/instances/2ace51cc-2a4e-4e79-abbf-577bcbfedd94/"
             },
             auth_token: "badtoken",
-            count:0 ,
-            transcript_output:""
+            count: 0,
+            transcript_output: "",
         };
     };
 
     getWebSocket() {
         const wsURI = this.state.ibm_creds.url + '/v1/recognize' + '?access_token=' + this.state.auth_token;
         console.log("this is the URL  " + wsURI);
-        this.websocket = new WebSocket(wsURI) ;
+        this.websocket = new WebSocket(wsURI);
         return wsURI
     } ;
 
@@ -36,7 +44,6 @@ class Transcript extends React.Component {
         this.mediaRecorder.ondataavailable = (e) => {
             this.handleData(e);
         };
-
     }
 
     handleData(e) {
@@ -44,8 +51,6 @@ class Transcript extends React.Component {
             // console.log("sending "+ e.data) ;
             this.websocket.send(e.data);
         }
-
-
     }
 
     startRecording(e) {
@@ -106,82 +111,112 @@ class Transcript extends React.Component {
                 this.getWebSocket();
 
             }).then(res => {
-               this.websocket.onopen = (ev => (this.onOpen(ev))) ;
-               this.websocket.onmessage = (ev => (this.onMessage(ev))) ;
-               this.websocket.onclose = (ev => (this.onClose(ev))) ;
-               this.websocket.onerror = (ev => (this.onError(ev))) ;
+                this.websocket.onopen = (ev => (this.onOpen(ev)));
+                this.websocket.onmessage = (ev => (this.onMessage(ev)));
+                this.websocket.onclose = (ev => (this.onClose(ev)));
+                this.websocket.onerror = (ev => (this.onError(ev)));
             })
 
     } ;
-     traverse(jsonObj) {
-        if( jsonObj !== null && typeof jsonObj == "object" ) {
+
+    traverse(jsonObj) {
+        if (jsonObj !== null && typeof jsonObj == "object") {
             Object.entries(jsonObj).forEach(([key, value]) => {
                 // key is either an array index or object key
-                if(key === "transcript") {
-                    return value ;
-                }else {
+                if (key === "transcript") {
+                    return value;
+                } else {
                     // eslint-disable-next-line no-undef
                     this.traverse(value);
                 }
             });
-        }
-        else {
-           return  " test " ;
+        } else {
+            return " test ";
         }
     }
+
     onMessage(evt) {
-        console.log("YEEET!!") ;
-       // console.log(evt.data) ;
-      // console.log(typeof evt.data) ;
+        console.log("YEEET!!");
+        // console.log(evt.data) ;
+        // console.log(typeof evt.data) ;
 
-       let transcript_json = JSON.parse(evt.data) ;
-       console.log(transcript_json) ;
-       if(transcript_json.hasOwnProperty('results')) {
-           let lop = JSON.stringify(transcript_json.results[0].alternatives[0].transcript);
-           //console.log(l);
-           this.setState({transcript_output:this.state.transcript_output+ " " + lop}) ;
-
-       }
+        let transcript_json = JSON.parse(evt.data);
+        console.log(transcript_json);
+        if (transcript_json.hasOwnProperty('results')) {
+            let lop = transcript_json.results[0].alternatives[0].transcript;
+            //console.log(l);
+            this.setState({transcript_output: this.state.transcript_output + " " + lop});
+            this.setState({current_output: lop});
+        }
 
     }
-     onOpen(evt) {
+
+    onOpen(evt) {
         var message = {
             "action": 'start',
             "content-type": 'audio/webm;codecs=opus',
             "interim_results": true
-    };
+        };
         this.websocket.send(JSON.stringify(message));
     }
-    onClose(ev) { console.log("CLOSED")}
-    onError(ev) {console.log("ERROR!!!!")}
-    getOutput(){
+
+    onClose(ev) {
+        console.log("CLOSED")
+    }
+
+    onError(ev) {
+        console.log("ERROR!!!!")
+    }
+
+    getOutput() {
         console.log("Text Output " + this.state.transcript_output);
         return this.state.transcript_output;
     }
 
     render() {
-       // const {recording, audios} = this.state;
+        // const {recording, audios} = this.state;
         return (
             <div className="transcript_audio_recording">
                 <audio
-
-
                     style={{width: 400}}
                     ref={a => {
                         this.audio = a;
                     }}>
                     <p>Audio stream not available. </p>
                 </audio>
-                <div>
-                    <button onClick={e => this.startRecording(e)}>Record</button>
-                    <button onClick={e => this.stopRecording(e)}>Stop</button>
-                </div>
-                <p >
-                    This is a display
-                    {this.getOutput()}
-                </p>
-
-
+                <Fab variant="extended"
+                     onClick={(e) => {
+                         this.state.recording ? this.stopRecording(e) : this.startRecording(e);
+                     }}
+                     color={this.state.recording ? "secondary" : "primary"}
+                     style={{
+                         position: "absolute",
+                         left: "20px",
+                         bottom: "20px",
+                     }}
+                >
+                    {this.state.recording ?
+                        <MicOffIcon style={{marginRight: "8px",}}/> :
+                        <MicIcon style={{marginRight: "8px",}}/>}
+                    {this.state.recording ? "Listening..." : "Start Transcription"}
+                </Fab>
+                <Typography
+                    variant="h4"
+                    style={{
+                        position: "absolute",
+                        left: "70px",
+                        right: "70px",
+                        top: "70px",
+                        bottom: "70px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                    }}
+                    gutterBottom>
+                    {this.state.current_output ? this.state.current_output : "(Transcription hasn't started yet)"}
+                </Typography>
             </div>
         )
     }
