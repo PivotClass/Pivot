@@ -38,6 +38,7 @@ export default function TranscriptViewer(props) {
                 {/*TODO: change this.state.current_output to transcript from teacher.*/}
                 {/*{this.state.current_output ? this.state.current_output : "(Transcription hasn't started yet)"}*/}
                 (Transcription hasn't started yet)
+                /*TODO: Keywords from teacher */
             </Typography>
         </div>
     )
