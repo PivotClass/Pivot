@@ -111,7 +111,7 @@ export default function Home() {
             width: "80%",
             height: "30%",
             position: "absolute",
-            top: "35%",
+            top: "40%",
             left: "10%",
             paddingTop: "50px",
         },
