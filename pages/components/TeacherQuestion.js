@@ -36,23 +36,27 @@ export default function TeacherQuestion(props) {
         const [list, setList] = useState();
         useEffect(() => {
             let isMounted = true;
-          async function load() {
-            const client = new RoomService({
-              auth: "/api/roomservice",
-            });
-            const room = await client.room(roomName);
-            const l = await room.list(listName);
-            if (isMounted) setList(l);
-      
-            room.subscribe(l, (li) => {
-              console.log(li);
-              if (isMounted) setList(li);
-            });
-          }
-          load();
-          return () => {isMounted=false};
+
+            async function load() {
+                const client = new RoomService({
+                    auth: "/api/roomservice",
+                });
+                const room = await client.room(roomName);
+                const l = await room.list(listName);
+                if (isMounted) setList(l);
+
+                room.subscribe(l, (li) => {
+                    console.log(li);
+                    if (isMounted) setList(li);
+                });
+            }
+
+            load();
+            return () => {
+                isMounted = false
+            };
         }, []);
-      
+
         return [list, setList];
     }
 
@@ -101,24 +105,32 @@ export default function TeacherQuestion(props) {
                                     Answered!
                                 </Button>
                             </CardActions></>
-                            
-                            : (props.teacherView ?
-                                <>
-                                    <Divider variant="middle"/>
-                                    <CardActions>
-                                        <Button onClick={() => {answerQuestion(props.cardID)}} variant="outlined" color="primary" className={classes.button}>
-                                            Mark Answered
-                                        </Button>
-                                        <Button onClick={() => {deleteQuestion(props.cardID)}} variant="outlined" color="secondary" className={classes.button}>
-                                            Delete
-                                        </Button>
-                                    </CardActions></>
-                                : (props.authorID===props.viewerID ?
-                                    <>
-                                    <Button onClick={() => {deleteQuestion(props.cardID)}}variant="outlined" color="secondary" className={classes.button}>
+
+                        : (props.teacherView ?
+                        <>
+                            <Divider variant="middle"/>
+                            <CardActions>
+                                <Button onClick={() => {
+                                    answerQuestion(props.cardID)
+                                }} variant="outlined" color="primary" className={classes.button}>
+                                    Mark Answered
+                                </Button>
+                                <Button onClick={() => {
+                                    deleteQuestion(props.cardID)
+                                }} variant="outlined" color="secondary" className={classes.button}>
+                                    Delete
+                                </Button>
+                            </CardActions></>
+                        : (props.authorID === props.viewerID ?
+                            <>
+                                <Divider variant="middle"/>
+                                <CardActions>
+                                    <Button onClick={() => {
+                                        deleteQuestion(props.cardID)
+                                    }} variant="outlined" color="secondary" className={classes.button}>
                                         Dismiss Question
-                                    </Button></>
-                                    : null))}
+                                    </Button></CardActions></>
+                            : null))}
 
             </Card>
         </StylesProvider>
